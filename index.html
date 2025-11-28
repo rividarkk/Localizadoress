@@ -1,0 +1,5782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Localizadores — Busca Profissional Avançada</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* 🎨 Variáveis e Tema Dark Profissional */
+:root {
+  --bg: #111827; /* Fundo principal (Dark Slate) */
+  --card: #1f2937; /* Cor do Card, sutilmente mais claro */
+  --accent: #38bdf8; /* Ciano/Azul moderno (Tailwind Sky Blue) */
+  --accent-light: #7dd3fc; /* Versão mais clara para hover */
+  --muted: #9ca3af; /* Texto secundário discreto */
+  --text: #f3f4f6; /* Texto principal claro */
+  --radius: 12px; /* Cantos mais arredondados */
+  --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.2);
+  --spacing-xs: 8px;
+  --spacing-s: 12px;
+  --spacing-m: 20px;
+  --spacing-l: 30px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  padding: var(--spacing-l) var(--spacing-m);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* 🧱 Cabeçalho Sofisticado */
+header {
+  margin-bottom: var(--spacing-l);
+  padding-bottom: var(--spacing-s);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08); /* Separador mais marcante */
+}
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent-light);
+  letter-spacing: 0.5px;
+}
+.header-meta {
+  color: var(--muted);
+  font-size: 15px;
+  margin-top: var(--spacing-xs);
+  font-weight: 300;
+}
+
+/* 🔍 Bloco de Busca Aprimorado */
+.search-wrap {
+  display: flex;
+  flex-direction: column; 
+  gap: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
+  align-items: flex-start; /* Alinha o grupo de busca à esquerda */
+}
+.search {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+  gap: var(--spacing-s);
+  align-items: center;
+  width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: var(--spacing-s);
+  box-shadow: var(--shadow-sm);
+}
+.search-input-group {
+    flex: 1 1 300px; /* Faz com que o input cresça */
+    display: flex;
+    gap: 8px;
+    background: #111827; /* Fundo mais escuro para o input group */
+    border-radius: 8px;
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color .2s;
+}
+.search-input-group:focus-within {
+    border-color: var(--accent);
+}
+.search input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  padding: 4px 0; /* Padding ajustado */
+  font-size: 16px;
+}
+
+/* Estilizando o Select */
+.filter-select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.1); /* Cor de destaque mais suave */
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: all .2s ease;
+  min-width: 150px;
+}
+.filter-select:hover, .filter-select:focus {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--accent);
+}
+.filter-select option {
+  background-color: var(--card); 
+  color: var(--text);
+}
+
+.search button {
+  background: var(--accent);
+  color: var(--bg); /* Texto escuro no botão claro */
+  border: 0;
+  padding: 10px var(--spacing-m);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: background .2s ease, transform .1s;
+  flex-shrink: 0;
+}
+.search button:hover {
+  background: var(--accent-light);
+  transform: translateY(-1px);
+}
+
+.controls{
+  display:flex;
+  gap:var(--spacing-s);
+  align-items:center;
+  margin-top: var(--spacing-xs);
+  padding: 0 var(--spacing-s);
+}
+.controls label{
+  color:var(--muted);
+  font-size:14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.controls input[type="checkbox"] {
+  accent-color: var(--accent); /* Cor de destaque no checkbox */
+}
+
+/* 🖼️ Layout e Estilo dos Cards (Empilhados Verticalmente) */
+.results {
+  display: flex; /* Flexbox para empilhar */
+  flex-direction: column; /* Força a coluna */
+  gap: var(--spacing-s); /* Espaçamento mais apertado entre os cards */
+  padding-bottom: var(--spacing-l);
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: var(--spacing-m);
+  box-shadow: var(--shadow-lg); /* Sombra mais destacada */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.card:hover {
+  transform: translateY(-2px); /* Efeito sutil de levantar */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+.card h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  padding-bottom: 4px;
+}
+.meta {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Linha divisória sutil */
+  padding-bottom: 4px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.tag {
+  display: block; /* Ocupa a largura total para o bloco de atuação */
+  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.1); /* Fundo sutil para o texto de atuação */
+  color: var(--accent-light);
+  font-weight: 400;
+  font-size: 14px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.no-results {
+  margin-top: var(--spacing-l);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: #273041;
+  color: var(--muted);
+  text-align: center;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+}
+footer {
+  margin-top: var(--spacing-l);
+  padding-top: var(--spacing-m);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* 🖱️ Estilo do 'Copiar' e Feedback */
+.click-copy {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: 0.2s;
+  font-weight: 600;
+  color: var(--accent);
+}
+.click-copy:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--accent-light);
+}
+.copied-feedback {
+    color: #4ade80 !important; /* Verde de sucesso (Tailwind Green) */
+    font-weight: 700;
+}
+
+/* Responsividade Básica */
+@media (max-width: 600px) {
+  body {
+    padding: var(--spacing-m) var(--spacing-s);
+  }
+  .search-wrap {
+    gap: var(--spacing-s);
+  }
+  .search {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--spacing-s);
+  }
+  .search-input-group {
+    width: 100%;
+    flex: none;
+  }
+  .filter-select {
+    min-width: 100%;
+  }
+  .search button {
+    width: 100%;
+  }
+  .controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+</style></head>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>Localizadores — Busca Profissional</h1>
+  <div class="header-meta">Busca otimizada por Localizador, UF ou Comarca de Atuação.</div>
+</header>
+
+<div class="search-wrap">
+  <div class="search" role="search">
+    <label for="filterType" class="sr-only">Filtrar por:</label>
+    <select id="filterType" class="filter-select" aria-label="Selecione o campo para buscar">
+      <option value="comarca_atuacao" selected>Comarca/Atuação</option>
+      <option value="nome">Localizador (Nome)</option>
+      <option value="uf">UF (Estado)</option>
+    </select>
+    
+    <div class="search-input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--muted); flex-shrink: 0; align-self: center;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <label for="cityInput" class="sr-only"></label>
+        <input id="cityInput" placeholder="Digite o termo para buscar (Ex: Curitiba,Todas )"/>
+    </div>
+    
+    <button id="searchBtn">Buscar</button>
+  </div>
+  
+  <div class="controls">
+    <label id="matchExactLabel" style="display:none;"><input id="matchExact" type="checkbox" /> Busca Exata (Somente para UF)</label>
+  </div>
+</div>
+
+<div id="results" class="results" aria-live="polite" aria-atomic="true"></div>
+<div id="noResults" class="no-results" style="display:none">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px;"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+  <p>Nenhum localizador encontrado. Tente um termo de busca diferente.</p>
+</div>
+
+<footer>
+  <p>© 2025 Localizadores| NOVA GESTÕES</p>
+</footer>
+
+</div><script>
+/* ---- COLE SEUS DADOS AQUI ---- */
+const dados = [
+  {
+    "LOCALIZADOR": "EDSON SANTANA DE OLIVEIRA",
+    "CONTATO": "9691115228",
+    "COMARCA": "AC",
+    "ATUAÇÃO/ COMARCA": "TODAS"
+  },
+  {
+    "LOCALIZADOR": "ANGELICA",
+    "CONTATO": "8291010188",
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "MACEIO"
+  },
+  {
+    "LOCALIZADOR": "LIVIRSON KLEBER SOARES SANTOS",
+    "CONTATO": "82991132412",
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": ""
+  },
+  {
+    "LOCALIZADOR": "MARTA CRISTIANE DE QUEIROZ NAVA",
+    "CONTATO": "82988958583",
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": ""
+  },
+  {
+    "LOCALIZADOR": "ISRAEL CORREIA SOUZA DA SILVA",
+    "CONTATO": "82999739306",
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "Maceió Marechal Deodoro Rio Largo Messias Murici Pilar Coqueiro Sec Palmeira dos Índios Arapiraca Atalaia Satuba"
+  },
+  {
+    "LOCALIZADOR": "EDSON SANTANA DE OLIVEIRA",
+    "CONTATO": 9691115228,
+    "COMARCA": "AC",
+    "ATUAÇÃO/ COMARCA": "TODAS"
+  },
+  {
+    "LOCALIZADOR": "ANGELICA",
+    "CONTATO": 8291010188,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "MACEIO"
+  },
+  {
+    "LOCALIZADOR": "LIVIRSON KLEBER SOARES SANTOS",
+    "CONTATO": 82991132412,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARTA CRISTIANE DE QUEIROZ NAVA",
+    "CONTATO": 82988958583,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ISRAEL CORREIA SOUZA DA SILVA",
+    "CONTATO": 82999739306,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "Maceió Marechal Deodoro Rio Largo Messias Murici Paripueira Satuba Santa Luzia do Norte Pilar Atalaia São Miguel dos Campos São Miguel dos Milagres São Luiz do Quitunde"
+  },
+  {
+    "LOCALIZADOR": "PEDRO HENRIQUE DA HORA LIMA",
+    "CONTATO": 8296131940,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO DE TARSO DE MELLO QUEIROZ",
+    "CONTATO": 8299766512,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARIVALDO CALUMBY ESTEVAM JUNIOR",
+    "CONTATO": NaN,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FELIPE BRUNO DA SILVA OLIVEIRA",
+    "CONTATO": 8296407283,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HILBERNNON THYAGO ALVES DE MACEDO",
+    "CONTATO": 8299936447,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GLEYDSON SILVA DA ROCHA",
+    "CONTATO": 8296439303,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "MACEIÓ"
+  },
+  {
+    "LOCALIZADOR": "PEDRO NETO",
+    "CONTATO": 8291917373,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAFAEL CABRAL MARINHO",
+    "CONTATO": 82996766490,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSEILSON BEZERRA",
+    "CONTATO": 8299422848,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "MAJOR ISIDORO"
+  },
+  {
+    "LOCALIZADOR": "JOAO MARIO",
+    "CONTATO": 81995721344,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "Penedo"
+  },
+  {
+    "LOCALIZADOR": "GRAZY",
+    "CONTATO": 8299071515,
+    "COMARCA": "AL",
+    "ATUAÇÃO/ COMARCA": "Faz todas as comarcas menos Caucaia e Fortaleza"
+  },
+  {
+    "LOCALIZADOR": "RICARDO",
+    "CONTATO": 92994341550,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JONES ALMIR NASCIMENTO DE AMARAL",
+    "CONTATO": 9288151158,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EMERSON MOREIRA CABRAL",
+    "CONTATO": 9293648483,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MIKAEL KALEBE DOS SANTOS E SILVA",
+    "CONTATO": 9294456146,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAPALEGUAS LOCALIZACAO",
+    "CONTATO": 9291260094,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCELINO DURANS MENDONÇA",
+    "CONTATO": 9291549705,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JULIETA BRASIL FADOUL NETA",
+    "CONTATO": 9791526476,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARIO CHERMON DA SILVA GOMES",
+    "CONTATO": 9281366502,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABIO LESSA",
+    "CONTATO": 9281585475,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": "Manaus, Iranduba, Presidente Figueiredo, Rio Preto da Eva"
+  },
+  {
+    "LOCALIZADOR": "JOSE EDUARDO FREIRE DA SILVA",
+    "CONTATO": 9294341550,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": "MANAUS"
+  },
+  {
+    "LOCALIZADOR": "IGOR RAFFAEL COSTA DE LIMA",
+    "CONTATO": 9284571847,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCIO",
+    "CONTATO": 9291932858,
+    "COMARCA": "AM",
+    "ATUAÇÃO/ COMARCA": "Manaus (Principal), Iranduba, Manacapuru, Itacoatira e Rio Preto da Eva"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON MARINHO DE SOUZA",
+    "CONTATO": 9681116738,
+    "COMARCA": "AP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DIOGO",
+    "CONTATO": NaN,
+    "COMARCA": "AP",
+    "ATUAÇÃO/ COMARCA": "Macapa"
+  },
+  {
+    "LOCALIZADOR": "ITALO RAMOS",
+    "CONTATO": 7181078528,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUCIANO CIRNE DE SIQUEIRA",
+    "CONTATO": 7187026417,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDILSON RAIMUNDO BORGES RIBEIRO",
+    "CONTATO": 7188235242,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JEOVA CARVALHO DE SOUZA JUNIOR",
+    "CONTATO": 75988002955,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BRENO LIMA",
+    "CONTATO": 71982634956,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DEIDEVISSON PESSOA DE SOUZA",
+    "CONTATO": 7799911476,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Bom Jesus da Lapa-Ba - Correntina-Ba - Paratinga-Ba - Riacho de Santana-Ba - Santa Maria da Vitória-Ba"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON",
+    "CONTATO": 7199777246,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO CARLOS SERAFIM DA SILVA",
+    "CONTATO": 7193348247,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CRISTOVAO ALDIR SILVA",
+    "CONTATO": 75988043312,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "THAYINE GONÇALVES LÔBO RAMOS",
+    "CONTATO": 75999692230,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ESEQUIEL LIMA TORRES",
+    "CONTATO": 7599314488,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAFAEL MOURA FERREIRA",
+    "CONTATO": 71987172765,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDSON MOREIRA",
+    "CONTATO": 77999487447,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS ALBERTO",
+    "CONTATO": 7186756109,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MAURICIO ALMEIDA SUZART",
+    "CONTATO": 7188862028,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALDEMIRO ANUNCIAÇÃO DOS SANTOS",
+    "CONTATO": 7191088926,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EVANDESON NEVES COSTA",
+    "CONTATO": 7591994341,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MIGUEL NASCIMENTO DE SOUZA",
+    "CONTATO": 71993283346,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAQUIM SABA GUEDES",
+    "CONTATO": 71991446581,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDSON PIRES REGO",
+    "CONTATO": 7799961574,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ARISTIDES AGUIA",
+    "CONTATO": 74988210336,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS",
+    "CONTATO": 7398437444,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Itagimirim,Belmonte ,Santa Cruz de Cabrália , Porto Seguro, Eunápolis tabela Guaratinga, Itamaraju Prado"
+  },
+  {
+    "LOCALIZADOR": "(GRUPO AGUIA) - ARISTIDES",
+    "CONTATO": 74988071466,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "JUAZEIRO, JAGUARARI, CASA NOVA, CURAÇÁ, CANUDOS, CAMPO FORMOSO, SOBRADINHO, SENTO SÉ, SENHOR DO BONFIM, UAUÁ"
+  },
+  {
+    "LOCALIZADOR": "MARCOS ALVES REZENDE",
+    "CONTATO": 7591968889,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALDEMIRO ANUNCIAÇÃO",
+    "CONTATO": 7191088926,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "SALVADOR"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON TAVARES GOMES",
+    "CONTATO": 77981309721,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SERGIO ROBERTO LOPES CAMPOS",
+    "CONTATO": 75982989440,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RODRIGO BACELAR",
+    "CONTATO": 75991176242,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DHECSON CORREIA DE OLIVEIRA",
+    "CONTATO": 75998530764,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "vitoria da conquista"
+  },
+  {
+    "LOCALIZADOR": "ENDRIGO ANDRADE CRUZ",
+    "CONTATO": 71999993986,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "SANTO ANTONIO DE JESUS - LUIS EDUARDO MAGALHAES"
+  },
+  {
+    "LOCALIZADOR": "GILVAN LUIS DA SILVA",
+    "CONTATO": 73998012363,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "porto seguro"
+  },
+  {
+    "LOCALIZADOR": "JOSE DE ARIMATHEA SANTOS ROCHA",
+    "CONTATO": 73991521335,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "porto seguro"
+  },
+  {
+    "LOCALIZADOR": "JOSÉ ELIAS SEIBERT SANTANA",
+    "CONTATO": 7399279007,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Itabuna Ilhéus ibicarai iguai Ipiau Ibirataia camacan Itacaré canavieiras Uruçuca Ubatã Ubaitaba camamu taperoá Igaratá Valença Itajuípe coaraci"
+  },
+  {
+    "LOCALIZADOR": "LUCAS SIMIONI SANTOS VALVERDE",
+    "CONTATO": 7583050544,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Alagoinhas, pojuca, Catu, irará, inhambupe, Entre rios , Esplanada"
+  },
+  {
+    "LOCALIZADOR": "MARCO ANTONIO GALVAO LIMA",
+    "CONTATO": 7799421656,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Jaguara /"
+  },
+  {
+    "LOCALIZADOR": "MARCOS VINÍCIUS",
+    "CONTATO": 7193000707,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "TODA BAHIA"
+  },
+  {
+    "LOCALIZADOR": "MICHEL",
+    "CONTATO": 7588316333,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "PAULO AFONSO"
+  },
+  {
+    "LOCALIZADOR": "SABINO DE JESUS EVANGELISTA",
+    "CONTATO": 71992359852,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Salvador, Camaçari e Lauro de Freitas"
+  },
+  {
+    "LOCALIZADOR": "SIDINEI SOUZA",
+    "CONTATO": 7181837171,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "ILHEUS/ ITABUNA/ EUNAPOLIS/ CAMACÃ/ ITAJUIPE/ COARACI/ URUÇUCA/ GANDU/ WENCESLAU GUIMARÃES"
+  },
+  {
+    "LOCALIZADOR": "THIAGO CALMON DE ARAUJO",
+    "CONTATO": 7193888877,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Simões filho, Camaçari, Lauro de Freitas"
+  },
+  {
+    "LOCALIZADOR": "ROBERTO LIMA ARAGÃO",
+    "CONTATO": 7187566338,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE CARLOS SALDANHA",
+    "CONTATO": 7191162860,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JORGE DOS SANTOS",
+    "CONTATO": 71993487148,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "CANDEIAS"
+  },
+  {
+    "LOCALIZADOR": "NALDO",
+    "CONTATO": 7599451124,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "SANTA BÁRBARA, SERRINHA, CONCEIÇÃO DO COITE, RIACHÃO DO JACUÍPE, NOVA FÁTIMA, SENHOR DO BONFIM, CAMPO FORMOSO, ITIÚBA, CANSCANCAO, MONTE SANTO, EUCLIDES DA CUNHA, TUCANO, RIBEIRA DO POMBAL, CIPÓ, TEOFILANDO, CÍCERO DANTAS E PARIPIRANGA ,VALENTE ,RETIROLANDIA E JEREMUABO"
+  },
+  {
+    "LOCALIZADOR": "SÉRGIO DARLAN MACÁRIO DOS SANTOS",
+    "CONTATO": 71988308845,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VICTOR JORGE SILVA DOS SANTOS",
+    "CONTATO": 7592118826,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "Dias Dávila, Catu, Pojuca mata de São João, São Sebastião do Passe, Candeias, São Francisco do Conde, Santo Amaro, Cachoeira, São Félix, Muritiba Governador Mangabeira, Cruz das Almas, Sapeaçu, Conceição do Almeida, Santo Antônio de Jesus, Gandu, Valença, Camamu, Santo Estevão, Ipirá, Serrinha, Conceição do Coite, Ribeira do Pombal Cícero Dantas, Inhambupe, Entre Rios, Alagoinhas, Coração de Maria, Irará, Feira de Santana, Conceição do Jacuipe"
+  },
+  {
+    "LOCALIZADOR": "SERGIO DO ROSARIO BARBOSA",
+    "CONTATO": 71991483123,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "CRUZ DAS ALMAS"
+  },
+  {
+    "LOCALIZADOR": "DECSON",
+    "CONTATO": 7598530764,
+    "COMARCA": "BA",
+    "ATUAÇÃO/ COMARCA": "VITORIA DA CONQUISTA"
+  },
+  {
+    "LOCALIZADOR": "PAULO EDUARDO LIMA ALVES",
+    "CONTATO": 8892682299,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "Juazeiro do Norte, crato, Barbalha, missão velha, milagres, jardim"
+  },
+  {
+    "LOCALIZADOR": "ADAUTO SOARES PEREIRA",
+    "CONTATO": 85986562484,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "Fortaleza e toda região metropolitana de Fortaleza Aquiraz Eusebio Pindoretama Cascavel Beberibe Pacajus São Gonçalo do Amarante Aracati Maracanau Maranguape Horizonte e outros"
+  },
+  {
+    "LOCALIZADOR": "CARLOS SANTANA DE MATOS JUNIOR",
+    "CONTATO": 85988342071,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GUSTAVO LINS MENDES LOBO",
+    "CONTATO": 8893097974,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "NÃO RESPONDE"
+  },
+  {
+    "LOCALIZADOR": "ANTONIO ADALTON REGIO",
+    "CONTATO": 85999143511,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "SOBRAL"
+  },
+  {
+    "LOCALIZADOR": "DANIEL MAGALHÃES TAVARES FILHO",
+    "CONTATO": 85984032708,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DAVI MONTEIRO DE OLIVEIRA",
+    "CONTATO": 8585083150,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "fortaleza/ Caucaia"
+  },
+  {
+    "LOCALIZADOR": "RAILSON DA SILVA CAVALCANTE",
+    "CONTATO": 8881083657,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "Quixadá, Banabuiú, Choro Limão, Ibicuitinga, Quixeramobim, Ibaretama"
+  },
+  {
+    "LOCALIZADOR": "ANTONIO EDUARDO RODRIGUES DE SOUSA",
+    "CONTATO": 85987960860,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO FREIRE TEIXEIRA",
+    "CONTATO": 8599056281,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MISAEL GONSALVES JUNIOR",
+    "CONTATO": 88999058234,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALEXSANDRO OLIVEIRA DE LIMA",
+    "CONTATO": 8591091033,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO ALESSANDRO PAZ",
+    "CONTATO": 85986988688,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "MARACANAU/"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO DIARLLY FELIPE DE SOUSA",
+    "CONTATO": 88981547799,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "JUAZEIRO DO NORTE"
+  },
+  {
+    "LOCALIZADOR": "ARTUR DANTAS FERNANDES",
+    "CONTATO": 8587519054,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO PAULO",
+    "CONTATO": 8599009682,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "FORTALEZA"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO DAYVISON MONTEIRO NOGUEIRA",
+    "CONTATO": 8597759005,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JUCIANO HENRIQUE BRAGA",
+    "CONTATO": 8598127956,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE ERIBERTO MENDES FEITOSA",
+    "CONTATO": 8592797966,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO PAULO F. MAGALHAES",
+    "CONTATO": 8599009682,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "Fortaleza - Camocim"
+  },
+  {
+    "LOCALIZADOR": "MANOEL SOARES XAVIER",
+    "CONTATO": 85987523200,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "ITAPIPOCA, Fortaleza, Maracanaú, Caucaia, Itaitinga, Eusébio, Aquiraz, Acaraú, Quixeramobim, Quixadá"
+  },
+  {
+    "LOCALIZADOR": "RONALDO BENTO DA SILVA",
+    "CONTATO": 8896201478,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MISAEL JUNIOR",
+    "CONTATO": 8899058234,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "ITAITINGA"
+  },
+  {
+    "LOCALIZADOR": "PAULO JOSE FREITAS DE SOUZA",
+    "CONTATO": 85986419602,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "Fortaleza e caucaia"
+  },
+  {
+    "LOCALIZADOR": "PAULO",
+    "CONTATO": 8899132032,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "barbalha crato"
+  },
+  {
+    "LOCALIZADOR": "RAIMUNDO EVANDRO PAZ FERREIRA",
+    "CONTATO": 8592611242,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "FORTALEZA"
+  },
+  {
+    "LOCALIZADOR": "AUDISIO",
+    "CONTATO": 85991555353,
+    "COMARCA": "CE",
+    "ATUAÇÃO/ COMARCA": "faz todas as comarcas menos Caucaia e Fortaleza"
+  },
+  {
+    "LOCALIZADOR": "ADRIANO CORDEIRO",
+    "CONTATO": 6195951716,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BRUNA RODRIGUES",
+    "CONTATO": 6192267060,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAYS BATISTA DE SOUSA",
+    "CONTATO": 6198381547,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RENATO ALEX GONCALVES GONZAGA DOS SANTOS",
+    "CONTATO": 8187003041,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LIRAEL FELIX",
+    "CONTATO": 61985544012,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "SANTO ANTONIO DO DESCOBERTO -"
+  },
+  {
+    "LOCALIZADOR": "UELTON",
+    "CONTATO": 6181234679,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HUMBERTO BARBOSA PEREIRA DE SOUZA",
+    "CONTATO": 6198548175,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VALTER RODRIGUES MARTINS",
+    "CONTATO": 61982450776,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "BRASILIA / GUARA / AGUAS CLARAS / NUCLEO BANDEIRANTE / TAGUATINGA / RIACHO FUNDO"
+  },
+  {
+    "LOCALIZADOR": "LEONARDO OLIVEIRA NETO",
+    "CONTATO": 6181555086,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WILSON GONSALVES",
+    "CONTATO": 6195283518,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MOCAR",
+    "CONTATO": 6191493440,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSÉ MÁRIO",
+    "CONTATO": 61986051033,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Águas Claras e Guará"
+  },
+  {
+    "LOCALIZADOR": "MATEUS HENRIQUE FAGUNDES MATOS",
+    "CONTATO": 61984678217,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LEANDRO",
+    "CONTATO": 61986020012,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Valparaiso de Goias / Novo Gama"
+  },
+  {
+    "LOCALIZADOR": "VALTER",
+    "CONTATO": 61982450776,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Brasília, Águas Claras, Guará, Núcleo Bandeirante, Riacho fundo, Samambaia, Gama, Santa Maria, Taguatinga, Recanto das Emas\nParanoá, São Sebastião, Sobradinho"
+  },
+  {
+    "LOCALIZADOR": "LUIZ FELIPPE NOBREGA DE MIRANDA LOPES",
+    "CONTATO": 61999910199,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RICARDO ADRIANO DO NASCIMENTO",
+    "CONTATO": 6184124713,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HEITOR",
+    "CONTATO": 61995284744,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Águas claras, Taguatinga, Ceilândia, Brazilandia"
+  },
+  {
+    "LOCALIZADOR": "SILAS MESQUITA DE OLIVEIRA",
+    "CONTATO": 61986160530,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Samambaia, Gama, Santa Maria, Taguatinga, Recanto das Emas Brasília, Águas Claras, Guará, Núcleo Bandeirante, Riacho fundo,"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO",
+    "CONTATO": 61993921533,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Taguatinga, Ceilandia e Brazilandia"
+  },
+  {
+    "LOCALIZADOR": "EVERALDO",
+    "CONTATO": 61996192572,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Sao sebastiao"
+  },
+  {
+    "LOCALIZADOR": "RENATO",
+    "CONTATO": 61992563010,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RONALDO",
+    "CONTATO": 61985595111,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Brasilia e regiao"
+  },
+  {
+    "LOCALIZADOR": "SERGIO",
+    "CONTATO": 61982358861,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Planaltina / Sobradinho"
+  },
+  {
+    "LOCALIZADOR": "MAK",
+    "CONTATO": 6185458155,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Brasilia"
+  },
+  {
+    "LOCALIZADOR": "ADRIANO",
+    "CONTATO": 6195951716,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Brasilia"
+  },
+  {
+    "LOCALIZADOR": "GEOVANE",
+    "CONTATO": 61999424573,
+    "COMARCA": "DF",
+    "ATUAÇÃO/ COMARCA": "Brasilia"
+  },
+  {
+    "LOCALIZADOR": "ALMIR RODRIGUES",
+    "CONTATO": 27998235964,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Vitória - Cariacica - Vila Velha - Serra - Viana"
+  },
+  {
+    "LOCALIZADOR": "ERICA SALLES",
+    "CONTATO": 27996520083,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "KCAISON CAAB LOPED BALLA",
+    "CONTATO": 27999890399,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MATHEUS MOZER DE SOUZA",
+    "CONTATO": 27981298726,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ELBERT DA MOTA FORTES",
+    "CONTATO": 6286452020,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FERNANDO NUNES",
+    "CONTATO": 27997085078,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Serra/ ES"
+  },
+  {
+    "LOCALIZADOR": "GILVAN LUIS DA SILVA",
+    "CONTATO": 73998012363,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "itamaraju - PORTO SEGURO"
+  },
+  {
+    "LOCALIZADOR": "KCAISON BALLA",
+    "CONTATO": 27999890400,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "CACHOEIRO DE ITAPEMIRIM /"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO SILVA RIBEIRO",
+    "CONTATO": 27998828870,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Serra / Vitória Cariacica/ Vila Velha /fundão Ibiraçu/ João Neiva Aracruz domingos Martins marechal Floriano / Anchieta / piuma/ Marataízes / itapemirim / Alfredo chaves / iconha / São mateus / GUARAPARI /"
+  },
+  {
+    "LOCALIZADOR": "JOABE",
+    "CONTATO": 28998846501,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Cachoeiro de Itapemerim, Iconha , Piuma, Marataize"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO",
+    "CONTATO": 27998463853,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "CARIACICA,VITORIA,VIANA,REGIÃO SUL DO ESTADO,AFONSO CLAUDIO,ALEGRE,ALFREDO CHAVES,ANCHIETA,APIACA,ATÍLIO VIVACQUA,BOM JESUS DO NORTE, CASTELO,CONCEIÇÃO DO CASTELO,DOMINGOS MARTINS,GUARAPARI,IBATIBA,ICONHA,ITAPEMIRIM,IÚNA,MARATAÍZES,MARECHAL FLORIANO,MUNIZ FREIRE,PIÚMA,SANTA LEOPOLDINA,SANTA MARIA DE JETIBÁ,VENDA NOVA DO IMIGRANTE"
+  },
+  {
+    "LOCALIZADOR": "RUBENS",
+    "CONTATO": 27999276390,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Vila velha, vitoria, guarapari, serra, cariacica"
+  },
+  {
+    "LOCALIZADOR": "CEARLITO OAB/ES 32270",
+    "CONTATO": 27998657225,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Colatina, Linhares, Rio Bananal, Sooretama, Jaguaré, São Mateus, , Pinheiros, Conceição da Barra, Pedro Canário, Nova venécia, vila pavão,Boa esperança Sao Gabriel da Palha, Barra de são francisco, ecoporanga, agua doce do norte"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO",
+    "CONTATO": 27998828870,
+    "COMARCA": "ES",
+    "ATUAÇÃO/ COMARCA": "Guarapari, Vila velha, Serra, Vitória, Cariacica, Viana, Fundão, Ibiraçu, Joao Neiva, Aracruz, Domingos Martins, Marechal Floriano, Anchieta, Piuma, Alfredo Chaves, Marataizes, Itapemirim, Iconha"
+  },
+  {
+    "LOCALIZADOR": "EUGENIO CASSIO TEIXEIRA",
+    "CONTATO": 62985223363,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FERNANDO MARCIANO FERREIRA",
+    "CONTATO": 6493348066,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HUMBERTO JOSE DIAS",
+    "CONTATO": 6484526693,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EUG.⚖️JURÍDICO⚖️ GO",
+    "CONTATO": 6285223363,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO ALVES DE SOUZA",
+    "CONTATO": 6198153796,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "LUZIANIA"
+  },
+  {
+    "LOCALIZADOR": "PAULO EDUARDO",
+    "CONTATO": 6299373630,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS HENRIQUE",
+    "CONTATO": 6299853295,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "IPORA, mozarlandia, piranhas"
+  },
+  {
+    "LOCALIZADOR": "SANTO AFONSO FAVRETTO",
+    "CONTATO": 54996689805,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ERLEM ANTUNES CAMARGO",
+    "CONTATO": 6184116500,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "NOVO GAMA"
+  },
+  {
+    "LOCALIZADOR": "EVERALDO DA SILVA",
+    "CONTATO": 6196192572,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Sobradinho - Planaltina - Paranoa - Itapoa - São Sebastião"
+  },
+  {
+    "LOCALIZADOR": "EUGÊNIO",
+    "CONTATO": 6285223363,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiânia e Goianira"
+  },
+  {
+    "LOCALIZADOR": "FABIO GUERRA",
+    "CONTATO": 6295724334,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiânia, aparecida de Goiânia"
+  },
+  {
+    "LOCALIZADOR": "ADILSON",
+    "CONTATO": 64999375675,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABRÍCIO FRANCISCO DA COSTA",
+    "CONTATO": 64992433639,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "SENADOR CANEDO ,"
+  },
+  {
+    "LOCALIZADOR": "ALEX TEIXEIRA DE MACEDO",
+    "CONTATO": 6493241836,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CINTIA VIANA",
+    "CONTATO": 6191236552,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABRICIO LOPES",
+    "CONTATO": 6291185377,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "GOIANIA"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO FRANCISCO",
+    "CONTATO": 6492068300,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Rio Verde-GO Santa Helena de Goiás-GO Maurilândia-GO Jataí-GO Montividiu-GO Quirinópolis-GO Paranaiguara-GO Caçú-GO Aparecida do Rio Doce-GO Jandaia-GO Paraúna-GO Varjão-GO Acreúna-GO Cachoeira Alta-GO Edéia-GO Caldas Novas-GO Goiatuba-GO Margazão-GO Corumbaiba-GO Pires do Rio-GO Cristianopolis-GO Ipameri-GO Agua Limpa-GO Morrinhos-GO Piracanjuba-GO Hidrolandia-GO Bela Vista de Goiás-GO Catalão-GO Goiandira-GO São Luiz de Montes Belos-GO Palmeiras de Goias-GO Parauna-GO Goianira-GO Cachoeira Dourada-GO Itumbiara-GO Bom Jesus de Goias-GO"
+  },
+  {
+    "LOCALIZADOR": "LIRAEL FELIX",
+    "CONTATO": 61985544012,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "AGUAS LINDAS DE GOIAS -"
+  },
+  {
+    "LOCALIZADOR": "GABRIEL ARAUJO SILVA MESQUITA",
+    "CONTATO": 62981891474,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RICARDO BORGES",
+    "CONTATO": 6285558831,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiânia, aparecida de Goiânia"
+  },
+  {
+    "LOCALIZADOR": "VANGELHO MATIAS DA COSTA",
+    "CONTATO": 6296707481,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUIZ MÁRCIO MARTINS DOS SANTOS",
+    "CONTATO": 6299357542,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLERTAN ALVES SANTANA",
+    "CONTATO": 6285396042,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SAMUEL NUNES ALMEIDA TEIXEIRA",
+    "CONTATO": 6284143619,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOELSON REIS DE JESUS",
+    "CONTATO": 6284535300,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOVIANO MARCELO GOULART TOLEDO",
+    "CONTATO": 6299294495,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DANIELLA ATAIDES JACOB",
+    "CONTATO": 6492727723,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WILSON RIBEIRO",
+    "CONTATO": 62992155812,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "ANAPOLIS"
+  },
+  {
+    "LOCALIZADOR": "GLAUCIA MARIA CAETANO DA SILVEIRA PINTO",
+    "CONTATO": 6296742947,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "ceres, rialma, uruana, itapuranga, goianesia, barro alto, itapaci, rubiataba, uruaçu, campinorte, estrela do norte, formoso de goias, minaçu, nova crixas, mozarlandia, itaberai,"
+  },
+  {
+    "LOCALIZADOR": "RICARDO ALVES DE OLIVEIRA",
+    "CONTATO": 62982051358,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiania - Senador Canedo - Aparecida de Goiânia - Goianira - Nerópolis - Trindade - Guapo - Abadia"
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO",
+    "CONTATO": 61998153796,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Valparaiso de Goias"
+  },
+  {
+    "LOCALIZADOR": "DAIANE",
+    "CONTATO": 6292473322,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "RIALMA ,CERES,CARMO DO RIO VERDE,RUBIATABA,JARAGUÁ ,MINAÇU ,URUAÇU ,MARA ROSA,ESTRELA DO NORTE,RIANAPOLIS,ITABERAÍ ,GUAPÓ ,ITAUÇU ,NIQUELÂNDIA ,ITAPACI,BARRO ALTO,GOIANÉSIA ,PORANGATU ,SAO MIGUEL DO ✓ARAGUAIA ,URUANA ,CRIXÁS ,ITAPURANGA ,NOVA GLÓRIA ,FORMOSO ,SANTA ISABEL ,GOIÁS ,NOVA MERICA ,PILAR DE GOIÁS"
+  },
+  {
+    "LOCALIZADOR": "JOAO VITOR FERREIRA DE MELO",
+    "CONTATO": 6283034083,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WESLEI",
+    "CONTATO": 62983399430,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiania / Ap. de Goiania"
+  },
+  {
+    "LOCALIZADOR": "THIAGO",
+    "CONTATO": 62981413776,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiania,Aparecida de Goiania,Trindade,Neropolis,Anapolis,Jaragua,Ceres e rialma,Rubiataba,Uruaçu,Minaçu,Palmeiras de Goias,Nasario"
+  },
+  {
+    "LOCALIZADOR": "FLAVIO",
+    "CONTATO": 62993025984,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goianira, Araçu, Inhumas, Nerópolis, Itauçu, Taquaral"
+  },
+  {
+    "LOCALIZADOR": "NEWTON",
+    "CONTATO": 62984201694,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Petrolina,Jaraguá, Goianésia, Barro alto, Rialma,Ceres,Carmo do rio Verde, Uruana,Rubiataba, Itapuranga,Itaguarú, Taquaral, Íntimas,Itaucu, Itaberaí,Cidade de Goiás, Mozarlândia,Nova crixas,Itapaci,Sta Terezinha, Crixás,Uruaçu, Campinorte, Niquelândia, Mara Rosa,Estrela do norte, Formoso,Anicuns, Sanclerlândia, \nMossamedes,Pirinopolis"
+  },
+  {
+    "LOCALIZADOR": "SANDRO",
+    "CONTATO": 62993480219,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Catalão"
+  },
+  {
+    "LOCALIZADOR": "AGNALDO MARQUES CARVALHO",
+    "CONTATO": 6294948719,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DALTO SOARES BARBOSA",
+    "CONTATO": 62984784908,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LEOMAR",
+    "CONTATO": 62984116000,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Aparecida de Goiânia,Inhumas, Goianésia, Ceres, Rialma, São. Miguel do Araguaia, Goianira,Guapo,Jaragua,Porangatu,Caldas Novas,Ipameri,Catalao,Morrinhos,Santa Cruz de Goias,Bela Vista de Goiás."
+  },
+  {
+    "LOCALIZADOR": "RICARDO",
+    "CONTATO": 62993690373,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Aparecida de Goiânia, Senador canedo, São Luís de montes belos, Goiania"
+  },
+  {
+    "LOCALIZADOR": "ITAMAR",
+    "CONTATO": 64984139316,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Itumbiara"
+  },
+  {
+    "LOCALIZADOR": "JADISON",
+    "CONTATO": 62991515080,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiania, Ap. Goiania"
+  },
+  {
+    "LOCALIZADOR": "RICARDO BORGES BARCELOS NOGUEIRA",
+    "CONTATO": 6285558831,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADILSON",
+    "CONTATO": 64999735950,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Rio Verde"
+  },
+  {
+    "LOCALIZADOR": "GISELE",
+    "CONTATO": 62991776617,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Jandaia"
+  },
+  {
+    "LOCALIZADOR": "CARLOS",
+    "CONTATO": 62985549959,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO",
+    "CONTATO": 62984178217,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Aparecida de Goiânia, Bela Vista de Goiás, Bonfinópolis, Goiânia, Goianira, Hidrolândia, Leopoldo de Bulhões, Nazário, Piracanjuba, Senador Canedo, Trindade, Guapó, Vianópolis, Silvania"
+  },
+  {
+    "LOCALIZADOR": "GUILHERME XAVIER",
+    "CONTATO": 6286280062,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GILMAR VIEIRA DA SILVA",
+    "CONTATO": 62985560957,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+   {
+    "LOCALIZADOR": "FABRICIO",
+    "CONTATO": 62991185377,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "JATAI"
+  },
+  {
+    "LOCALIZADOR": "ANTÔNIO FÁBIO DE SOUSA",
+    "CONTATO": 6284240303,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GLAUCIA",
+    "CONTATO": 62996742947,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "ceres, rialma, uruana, itapuranga, jaragua, rubiataba, itapaci, santa terezinha, crixas, goianesia, barro alto, uruaçu, campinorte, mara rosa, estrela do norte, formoso de goias, minaçu, alvorada do norte, cavalcante, campos belos"
+  },
+  {
+    "LOCALIZADOR": "CHARLES",
+    "CONTATO": 61996353802,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Formosa, Flores de Goiais"
+  },
+  {
+    "LOCALIZADOR": "GISELLY MARQUES",
+    "CONTATO": 6291776617,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Aurilandia, São Luis dos Montes Belos"
+  },
+  {
+    "LOCALIZADOR": "GUILHERME",
+    "CONTATO": 6291524085,
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "Goiania, Aparecida de Goiania, Goianira, Senador Canedo"
+  },
+  {
+    "LOCALIZADOR": "ANTONIO CARLOS",
+    "CONTATO": 9891625225,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": "SÃO LUIS"
+  },
+  {
+    "LOCALIZADOR": "ANTONIO AUGUSTO ARAÚJO PINHEIRO",
+    "CONTATO": 9884594445,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": "São Luis - São José de Ribamar - Paço do lumiar - Raposa - Demais comarca, com programação de ida"
+  },
+  {
+    "LOCALIZADOR": "CLEBER SILVA FRASAO JUNIOR",
+    "CONTATO": 98984012250,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DARLAN",
+    "CONTATO": 9991130015,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": "AÇAILANDIA"
+  },
+  {
+    "LOCALIZADOR": "DAGILSON MORENO ERICEIRA",
+    "CONTATO": 9883047339,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "REINALDO SANTOS DA PAZ",
+    "CONTATO": 9981242593,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DARLAN GUALBERTO MATOS",
+    "CONTATO": 99991130015,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PEDRO CEZAR OLIVEIRA BARBOSA",
+    "CONTATO": 9885705451,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GLAUBER JONAS RODRIGUES CORRÊA",
+    "CONTATO": 9884624751,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABRICIO DE SOUZA MOURA",
+    "CONTATO": 98984342806,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "AUGUSTO",
+    "CONTATO": 98984594445,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ARMANDO HENRIQUE SA DA SILVA NETO",
+    "CONTATO": 9881310757,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "IEDINALDO ARAUJO",
+    "CONTATO": 9888075781,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HIAGO SOARES",
+    "CONTATO": 9884368850,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": "São Luís, Rosário , Bacabeira , Raposa , Paço do Lumiar , São José de Ribamar - SÃO JOSE DE RIBAMAR"
+  },
+  {
+    "LOCALIZADOR": "HYAGO",
+    "CONTATO": 98984368850,
+    "COMARCA": "MA",
+    "ATUAÇÃO/ COMARCA": "SAO LUIZ"
+  },
+  {
+    "LOCALIZADOR": "LEONARDO",
+    "CONTATO": 3188293358,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Pedro Leopoldo, Matozinhos, sete lagoas e Paraopeba"
+  },
+  {
+    "LOCALIZADOR": "DANIEL MIRANDA",
+    "CONTATO": 3288128297,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MATHEUS MAGALHÃES",
+    "CONTATO": 31987881147,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "LUZ/MG"
+  },
+  {
+    "LOCALIZADOR": "MARCO CUNHA",
+    "CONTATO": 33988660971,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Governador Valadares (onde moro), Teófilo Otôni e Mantena (ambos tenho localizador na comarca), Galiléia,\nConselheiro Pena, Resplendor, Aimorés, Itanhomi, Tarumirim, Inhapim e Itambacuri, Alpercata"
+  },
+  {
+    "LOCALIZADOR": "ADEMAR CAMILO",
+    "CONTATO": 3899456505,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADEVILSON COTA DA SILVA",
+    "CONTATO": 3192250248,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Santa barbara, Barao de cocais, Nova lima, Contagem, Betim,Catas altas"
+  },
+  {
+    "LOCALIZADOR": "AILTON APARECIDO NETO",
+    "CONTATO": 3799020346,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Oliveira. Campo belo.carmopolis.divinopolis.nova serrana.bom susseso.lavras.nepomuceno.perdões. lavras.formiga.alfenas.camposgerais.varginha.boa esperança. Itaguara.saojoaodeurei.nepomuceno.candeias.itapecerica.claudio.alfenas.Monte siao jacutinga.ouro fino pousalegre Poços de caldas"
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO DA SILVA",
+    "CONTATO": 3185509042,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte, Ribeirão das Neves, Vespasiano, Sabará"
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO DA SILVA",
+    "CONTATO": 31998964426,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BELO HORIZONTE"
+  },
+  {
+    "LOCALIZADOR": "ALEXSANDRO MARTINS DE OLIVEIRA",
+    "CONTATO": 3188457124,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BH, SABARA, NOVO LIMA , CAETE"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON FERNANDES GODINHO",
+    "CONTATO": 31983717682,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDRÉ LUIZ PEREIRA",
+    "CONTATO": 16988075287,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Frutal, Fronteira, São Sebastião do Paraíso, Pratápolis, Passos, Alpinópolis, Capetinga, Cassia, Itaú de Minas, Fortaleza de Minas, Monte Santo de Minas, Guaxupé, Muzambinho, Nova Resende, Guaranésia e Arceburgo"
+  },
+  {
+    "LOCALIZADOR": "ANDRE SALDANHA",
+    "CONTATO": 3188641833,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte, Contagem, betim e Vespasiano"
+  },
+  {
+    "LOCALIZADOR": "BRUNA GONCALVES",
+    "CONTATO": 3188641833,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlândia Uberaba"
+  },
+  {
+    "LOCALIZADOR": "CAIO CÉSAR RODRIGUES DE AGUIAR",
+    "CONTATO": 3491329008,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Tupaciguara, Monte Alegre De Minas, Araguari, estrela do sul, monte Carmelo, Coromandel, patrocínio, Ibia, nova ponte, Perdizes, Araxa, sacramento e conquista"
+  },
+  {
+    "LOCALIZADOR": "CARLOS EDUARDO",
+    "CONTATO": 3187171949,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Coronel Fabriciano Ipatinga Timóteo Açucena Mesquita Virginópolis Inhapim Nova Era Joao Monlevade Itabira Alvinópolis Rio Piracicaba Barão de Cocais São Domingos do Prata."
+  },
+  {
+    "LOCALIZADOR": "CHRISTIAN DE SOUZA E SILVA",
+    "CONTATO": 3491644292,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlandia, Araguari, Tupaciguara"
+  },
+  {
+    "LOCALIZADOR": "CLAUDIO DE AZEVEDO CORRÊA",
+    "CONTATO": 3193731139,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BH, contagem, betim"
+  },
+  {
+    "LOCALIZADOR": "CLEBER RODRIGUES LOPES",
+    "CONTATO": 3186038324,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DANILO",
+    "CONTATO": 3196563832,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte e região"
+  },
+  {
+    "LOCALIZADOR": "EDERSON ROCHA BATISTA",
+    "CONTATO": 3898105847,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Montes Claros; Janauba; Porteirinha; Jaiba; Espinosa; Manga; Januaria; Taiobeiras; Salinas; Coração de Jesus; Bocaiuva; Grão Mogol; Francisco Sá"
+  },
+  {
+    "LOCALIZADOR": "EDILSON GONCALVES CARNEIRO",
+    "CONTATO": 3491618844,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Patos de minas, Vazante , joao Pinheiro, presidente olegario, Carmo do Paranaiba, Rio Paranaiba São gotardo e tiros MG"
+  },
+  {
+    "LOCALIZADOR": "GLÁUCIO",
+    "CONTATO": 3399451011,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "manhumirim"
+  },
+  {
+    "LOCALIZADOR": "JANAINA",
+    "CONTATO": 3499745001,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "ITURAMA"
+  },
+  {
+    "LOCALIZADOR": "DANIEL LINS SACELUTI",
+    "CONTATO": 3291376198,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Juiz de Fora , Matias Barbosa , Lima Duarte, Santos Dumont , Barbacena , Bicas , Mar de Espanha , Leopoldina, Cataguases, Rio pomba , Uba , Muriaé , Miradouro ,Vieiras ,São Francisco do Glória ,Eugenópolis , Patrocínio do Muriaé, Barão do monte alto ,Palma"
+  },
+  {
+    "LOCALIZADOR": "JEFERSON ALVES TAVARES",
+    "CONTATO": 3598866658,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Pouso alegre,borda da mata,Itajubá, Cambuí,ouro fino,Bueno Brandão, jacutiga, Itajubá,extrema"
+  },
+  {
+    "LOCALIZADOR": "LAUDEMIRO ALVES",
+    "CONTATO": 3597519434,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "- Poços de Caldas -- Caldas - - Santa Rita de Caldas - - Bandeira do Sul - - Campestre - - Botelhos - - Areado - - Alfenas - - Carmo Do Rio Claro - - Cabo verde - - Andradas - - Guaxupé -- Ibitiúra de Minas -- Ouro Fino -- jacutinga -- Machado -- Divinopolis -- Pouso Alegre -- Paraguaçu -- Guaranesia -- Aceburgo -- Muzambinho -- Nova Rezende -- juruaia -- Serrania Poços de Caldas - Nova Rezende -Pirassununga"
+  },
+  {
+    "LOCALIZADOR": "LUCAS MILLARD",
+    "CONTATO": 3197450803,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BELO HORIZONTE , Matozinhos, Pedro Leopoldo e Vespasiano"
+  },
+  {
+    "LOCALIZADOR": "LUCIANO GONTIJO",
+    "CONTATO": 3199504111,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Sete lagoas, Paraopeba, jaiba, coração de Jesus, Diamantina, Francisco Sá, Salinas, várzea da palma, Pirapora , corinto"
+  },
+  {
+    "LOCALIZADOR": "LUIS ANTERO",
+    "CONTATO": 3591597272,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Passos, - São Sebastião do paraíso, - Alpinópolis, - Carmo Rio Claro, - Areado, - Guape, - Pratápolis, - Guaxupé, - Cassia, - Muzambinho, - Monte Santo de Minas, - Jacuí, - Ibiraci, - Guaranésia, - Itamogi, - Nova Resende"
+  },
+  {
+    "LOCALIZADOR": "LUIZ AUGUSTO ALVES",
+    "CONTATO": 3791311192,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Itaúna (residência) - Pará de Minas - Mateus Leme - Juatuba - Igarapé - Carmópolis de Minas - Itaguara - Bonfim - Brumadinho - Pitangui ( Exceto Papagaios Mg e Maravilhas Mg) - Bom Despacho - Luz"
+  },
+  {
+    "LOCALIZADOR": "LUIZ AUGUSTO ALVES",
+    "CONTATO": 3791311192,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Itaúna (residência) - Pará de Minas - Mateus Leme - Juatuba - Igarapé - Carmópolis de Minas - Itaguara - Bonfim - Brumadinho - Pitangui ( Exceto Papagaios Mg e Maravilhas Mg) - Bom Despacho - Luz"
+  },
+  {
+    "LOCALIZADOR": "MAICO FERREIRA DA CUNHA",
+    "CONTATO": 33988660971,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "GOVERNADOR VALADARES"
+  },
+  {
+    "LOCALIZADOR": "MARCELO VALE DE FARIA",
+    "CONTATO": 3299366853,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "alfenas"
+  },
+  {
+    "LOCALIZADOR": "MARCILIO",
+    "CONTATO": 3388137200,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "AGUAS FORMOSAS - TEOFILO OTONI - NOVO CRUZEIRO - DIVISA ALEGRE - PEDRO VERSIANI"
+  },
+  {
+    "LOCALIZADOR": "MARCO ANTONIO",
+    "CONTATO": 3187171949,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "divinopolis , lagoa da prata , carmo do cajuru , arcos , formiga , piumhi , iguatama , santo antonio do monte , itapecirica , pitangui , nova serrana"
+  },
+  {
+    "LOCALIZADOR": "MAURO",
+    "CONTATO": 3591482836,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Alpinópolis - Alfenas - Areado - Baependi - Boa Esperança - Botelho - Cabo Verde - Cambuquira - Campanha - Campestre - Campos Gerais - Carmo do Rio Claro - Caxambu - Eloi Mendes - Guapé - Guaranésia - Guaxupé - Lambari - Machado - Monte Belo - Muzambinho - Paraguaçu - Poço Fundo - Três Corações - Três Pontas - Varginha (Residência)"
+  },
+  {
+    "LOCALIZADOR": "OSMAR",
+    "CONTATO": 3499778181,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlândia / Araguari tupaciguara / monte alegue"
+  },
+  {
+    "LOCALIZADOR": "THIAGO",
+    "CONTATO": 3899909007,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Montes Claros (escritório) - Bocaiúva - Brasília de minas - Coração de Jesus - Janauba - Porterinha - - Francisco Sá - Espinosa - São Romão"
+  },
+  {
+    "LOCALIZADOR": "THIAGO DAMASCENO",
+    "CONTATO": 31971689444,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BETIM - CONTAGEM - ITABIRITO - OURO PRETO - MARIANA - PONTE NOVA - JEQUERI - CONGONHAS - OURO BRANCO - CONSELHEIRO LAFAIETE - PIRANGA - ENTRE RIOS DE MINAS - CARANDAÍ - BELO VALE - SANTA BARBARA - BARÃO DE COCAIS - JOÃO MONLEVADE - ITABIRA -"
+  },
+  {
+    "LOCALIZADOR": "WALLACE TOBIAS",
+    "CONTATO": 3180161777,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BELO HORIZONTE - CONTAGEM"
+  },
+  {
+    "LOCALIZADOR": "WELLINGTON DE SOUZA",
+    "CONTATO": 31985143850,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "IBIRITE"
+  },
+  {
+    "LOCALIZADOR": "CAIO",
+    "CONTATO": 34991329008,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Estrela do Sul, coromandel, patrocínio, ibia, sacramento, conquista, nova ponte, perdizes, Araxa, Tupaciguara, Monte Alegre de Minas, Pato de Minas"
+  },
+  {
+    "LOCALIZADOR": "DOUGLAS",
+    "CONTATO": 32991633858,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Juiz de Fora, Santos Dumont ,Barbacena , Barroso , Carandai , Prados , Rio pomba , Uba, Visconde do Rio Branco Vicosa , Viçosa , Ervalia , Merces , Guarani, Rio novo , Bicas , São João Neponuceno, Mar de Espanha, Leopoldina , Cataguases, Muriae , Além Paraiba , Matias Barbosa , Lima Duart."
+  },
+  {
+    "LOCALIZADOR": "DRA. CAROL",
+    "CONTATO": 31992094083,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Bh , contagem , Betim , nova lima"
+  },
+  {
+    "LOCALIZADOR": "DRA.TUANY",
+    "CONTATO": 31998647557,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Contagem"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO",
+    "CONTATO": 31995761540,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte"
+  },
+  {
+    "LOCALIZADOR": "JOAO",
+    "CONTATO": 38999575001,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Montes Claros"
+  },
+  {
+    "LOCALIZADOR": "MARCÃO (MF LOC.)",
+    "CONTATO": 37998089177,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Divinópolis, Lagoa da Prata, Carmo do Cajuru, Arcos, Formiga, Piumhi, Iguatama, Santo Antônio do Monte, Itapecerica, Pitangui, Nova Serrana"
+  },
+  {
+    "LOCALIZADOR": "MAICO",
+    "CONTATO": 33988660971,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Governador Valadares e Região"
+  },
+  {
+    "LOCALIZADOR": "SILVIO",
+    "CONTATO": 34991533191,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Urberlandia, Araguari"
+  },
+  {
+    "LOCALIZADOR": "NILOVANE",
+    "CONTATO": 31999846228,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte, Contagem, Betim, Santa Luzia, Igarapé, Lagoa Santa, Sabará, Vespasiano, Ibirite, Caeté, Juatuba, Mateus Leme e etc. RMBH e GRANDERMBH"
+  },
+  {
+    "LOCALIZADOR": "CRISTIAN",
+    "CONTATO": 34991644292,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlandia, araguari, uberaba"
+  },
+  {
+    "LOCALIZADOR": "WANDERSON",
+    "CONTATO": 31985677900,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Itaúna,Mateus Leme,Bom despacho,Luz ,Bambui,Dores Do Indaia,Martinho Campos,Abaeté,Pompéu"
+  },
+  {
+    "LOCALIZADOR": "ALEXSANDRO",
+    "CONTATO": 31988457124,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte"
+  },
+  {
+    "LOCALIZADOR": "ADEMAR",
+    "CONTATO": 38999651492,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Noroeste de Minas Gerais (Unai)"
+  },
+  {
+    "LOCALIZADOR": "WARLEY",
+    "CONTATO": 31994125880,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte"
+  },
+  {
+    "LOCALIZADOR": "ALEX",
+    "CONTATO": 31998964426,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte e regiao"
+  },
+  {
+    "LOCALIZADOR": "CLEBER",
+    "CONTATO": 31986038324,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Ibirite"
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO DELEGA",
+    "CONTATO": 31985509042,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte"
+  },
+  {
+    "LOCALIZADOR": "ANDRE",
+    "CONTATO": 38999578883,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "PARACATU"
+  },
+  {
+    "LOCALIZADOR": "MARCELO FARIA",
+    "CONTATO": 32999366853,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Sul de Minas. Oeste de Minas.. e algumas comarcas aqui perto.."
+  },
+ 
+  {
+    "LOCALIZADOR": "LEONARDO",
+    "CONTATO": 31988293358,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Pedro Leopoldo, Matozinhos, sete Lagoas, Paraopeba"
+  },
+  {
+    "LOCALIZADOR": "LUIZ PADILHA",
+    "CONTATO": 3798196660,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WELLINGTON",
+    "CONTATO": 31985143850,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "BH, Betim, Contagem"
+  },
+  {
+    "LOCALIZADOR": "SIRIA",
+    "CONTATO": 34984124684,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberaba"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO",
+    "CONTATO": 31985951862,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Contagem , Ibirite"
+  },
+  {
+    "LOCALIZADOR": "GLAUCIO SATHLER DA SILVA",
+    "CONTATO": 33999451011,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BRUNA",
+    "CONTATO": 34998867087,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlândia e Araguari"
+  },
+  {
+    "LOCALIZADOR": "MARCELO",
+    "CONTATO": 31989107464,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Ibirité, belo Horizonte,nova Lima ,santa luzia ,Sabará ,contagem ,betim"
+  },
+  {
+    "LOCALIZADOR": "TIAO",
+    "CONTATO": 35999416300,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Lavras, Campo Belo"
+  },
+  {
+    "LOCALIZADOR": "MOACIR",
+    "CONTATO": 34996957227,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlandia, Araguari"
+  },
+  {
+    "LOCALIZADOR": "THIAGO SILVA DAMASCENO",
+    "CONTATO": 31971689444,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "THIAGO SILVA DAMASCENO",
+    "CONTATO": 37999020346,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Oliveira , Campo belo , carmopolis , divinopolis , nova serrana , bom susseso , lavras , nepomuceno , perdões , formiga , campos gerais , varginha , boa esperança , Itaguara , sao joao del rei , nepomuceno , candeias , itapecerica , claudio , alfenas, Sao Lourenço , itajuba , pouso alegre , jacutinga , ouro fino , lambari , tres corações"
+  },
+  {
+    "LOCALIZADOR": "LUCIANA DE OLIVEIRA PARREIRAS",
+    "CONTATO": 31973416992,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUCIANO GONTIJO DE CAMPOS SOARES",
+    "CONTATO": 31999504111,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "OSMAR",
+    "CONTATO": 34999778181,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Uberlandia"
+  },
+  {
+    "LOCALIZADOR": "FLORESTA",
+    "CONTATO": 35999534330,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Passos e região"
+  },
+  {
+    "LOCALIZADOR": "ANDRE",
+    "CONTATO": 16988075287,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "SUL de MINAS GERAIS; ( Comarcas Interior ) São Sebastião do Paraíso, Pratápolis, Passos, Capetinga, Cassia, Itaú de Minas, Fortaleza de Minas, Monte Santo de Minas, Guaxupé, Muzambinho, Nova Resende, Guaranésia e Arceburgo/MG."
+  },
+  {
+    "LOCALIZADOR": "MARLON DAVIS",
+    "CONTATO": 31992260215,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte"
+  },
+
+  {
+    "LOCALIZADOR": "DANIEL",
+    "CONTATO": 37988084749,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Pará de Minas"
+  },
+  {
+    "LOCALIZADOR": "WESLEY",
+    "CONTATO": 31996627166,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte, Nova Serrana"
+  },
+  {
+    "LOCALIZADOR": "GERALDO VALENTIM SILVA",
+    "CONTATO": 3899976248,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCOS FARLEY",
+    "CONTATO": 38999568281,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Montes claros"
+  },
+  {
+    "LOCALIZADOR": "WALACE",
+    "CONTATO": 31980161777,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte e regiao"
+  },
+  {
+    "LOCALIZADOR": "SERGIO",
+    "CONTATO": 31991117722,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Sete Lagoas, Matozinhos, Pedro Leopoldo, Igarapé, Nova Lima, Congonhas, Paraopeba, Vespasiano, Brumadinho e Belo Horizonte."
+  },
+  {
+    "LOCALIZADOR": "AUGUSTO LAGES",
+    "CONTATO": 3398293834,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DOUGLAS",
+    "CONTATO": 34999642718,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Ituiutaba"
+  },
+  {
+    "LOCALIZADOR": "CLAUDINEY GOMES DOS SANTOS",
+    "CONTATO": 3186591513,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "THIAGO",
+    "CONTATO": "THIAGO",
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Andradas, Borda da Mata,Brasópolis,Bueno Brandão,Cachoeira de Minas,Caldas,Camanducaia,Cambuí,Carmo de Minas,Cristina,Extrema,Heliodora,Itajubá,Jacutinga,Lambari,Monte Sião,Natércia,Ouro Fino,Paraisópolis,Pedralva,Poço Fundo,Pouso Alegre,Santa Rita de Caldas,Santa Rita do Sapucaí,São Gonçalo do Sapucaí,São Lourenço,Silvianópolis"
+  },
+  {
+    "LOCALIZADOR": "CARLOS",
+    "CONTATO": 31987171949,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Ipatinga"
+  },
+  {
+    "LOCALIZADOR": "ALVARENGA REALE ADV",
+    "CONTATO": 3192791152,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JULIANO CUNHA LANA",
+    "CONTATO": 3184336142,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DELANO BATISTA PARREIRAS",
+    "CONTATO": 3188037722,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO",
+    "CONTATO": 31994088511,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Lagoa Santa , Conc. do Mato Dentro , Itabira , Barão de Cocais , Caete , Nova Lima , Itabirito , Congonhas , Ibirité , Brumadinho , Igarapé , Mateus Leme , Pedro Leopoldo , Matozinhos , Belo Horizonte , Betim , Contagem , Paraopeba , Pompéu , Santa Luzia , Vespasiano , Nova Serrana , Bom Despacho , Para de Minas , Pitangui , Curvelo"
+  },
+  {
+    "LOCALIZADOR": "LUCAS MILLARD NOGUEIRA RIBEIRO",
+    "CONTATO": 31997450803,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WAGTON",
+    "CONTATO": 34998226524,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Patrocinio , atende varias regioes de MG precisa perguntar"
+  },
+  {
+    "LOCALIZADOR": "ANDRE",
+    "CONTATO": 3188641833,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Belo Horizonte, Santa Luzia, Contagem"
+  },
+  {
+    "LOCALIZADOR": "AILTON PEREIRA SILVA",
+    "CONTATO": 67996533695,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "BATAGUASSU -"
+  },
+  {
+    "LOCALIZADOR": "GALEANO",
+    "CONTATO": 67996147423,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANÍZIO RODRIGUES LOPES FILHO",
+    "CONTATO": 67992607610,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "CAMPO GRANDE/ Tres lagoas / DOURADOS /"
+  },
+  {
+    "LOCALIZADOR": "EDSON JORGE DE OLIVEIRA VIEGAS",
+    "CONTATO": 67996272207,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LIANE RITA RIBEIRO DE ABREU",
+    "CONTATO": 67999475315,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LOKKUS (MATO GROSSO DO SUL)",
+    "CONTATO": 18981763535,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "- BRASILÂNDIA: Brasilândia e região \n- BATAGUASSU: Bataguassu e região"
+  },
+  {
+    "LOCALIZADOR": "FABIO",
+    "CONTATO": 6796088768,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "CORUMBA"
+  },
+  {
+    "LOCALIZADOR": "HIGOR VIEGAS",
+    "CONTATO": 6792825980,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Dourados,Fátima do Sul,caarapo ,Itaporã glória de dourados"
+  },
+  {
+    "LOCALIZADOR": "RUDEMAR",
+    "CONTATO": 6784222020,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "NAVIRAI --- TODO MS"
+  },
+  {
+    "LOCALIZADOR": "ANIZIO",
+    "CONTATO": 67992607610,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Campo Grande, Terenos"
+  },
+  {
+    "LOCALIZADOR": "ENIO",
+    "CONTATO": 67984060212,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Chapadao do Sul , Campo grande, Maracaju"
+  },
+  {
+    "LOCALIZADOR": "ODAIR",
+    "CONTATO": 67999245898,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Miranda, Corumba"
+  },
+  {
+    "LOCALIZADOR": "RUDEMAR",
+    "CONTATO": 67984222020,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Coxim, Naviraí"
+  },
+  {
+    "LOCALIZADOR": "AILTON",
+    "CONTATO": 67991106730,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Tres Lagoas, Aparecida do Taboado"
+  },
+  {
+    "LOCALIZADOR": "LUIZ",
+    "CONTATO": 67996229940,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Campo Grande, Dourados"
+  },
+  {
+    "LOCALIZADOR": "ANDRE",
+    "CONTATO": 67981014186,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Campo Grande e regioes"
+  },
+  {
+    "LOCALIZADOR": "DORALINA",
+    "CONTATO": 67996820154,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Dourados"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL",
+    "CONTATO": 67992139428,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Campo Grande"
+  },
+  {
+    "LOCALIZADOR": "HIGOR",
+    "CONTATO": 67996272203,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Dourados"
+  },
+  {
+    "LOCALIZADOR": "CEZAR",
+    "CONTATO": 6784191228,
+    "COMARCA": "MS",
+    "ATUAÇÃO/ COMARCA": "Campo Grande"
+  },
+  {
+    "LOCALIZADOR": "BETO SILLVA",
+    "CONTATO": 6596312078,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Cáceres"
+  },
+  {
+    "LOCALIZADOR": "MARCELO GLAUCIO DA SILVA NUNES",
+    "CONTATO": 65999115820,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GEORGE PAULO AGUIAR",
+    "CONTATO": 65992848246,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Cuiabá Varzea grande Poconé Jaciara Rondonopolis Campo verde Chapada dos Guimarães Nobres Rosario oeste Diamantino - TANGARA DA SERRA -"
+  },
+  {
+    "LOCALIZADOR": "GUSTAVO IZEPPI",
+    "CONTATO": 6696118700,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "SINOP"
+  },
+  {
+    "LOCALIZADOR": "MARCELO NUNES",
+    "CONTATO": 6599115820,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Sorriso"
+  },
+  {
+    "LOCALIZADOR": "GLEYCE RAMOS",
+    "CONTATO": 6792725780,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARIA KATHIUCIA",
+    "CONTATO": 6684265141,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Torixoreu - Pontal - Aragarças - Nova xavantina - Barra do garças e as cidadezinha ao redor de barra"
+  },
+  {
+    "LOCALIZADOR": "REGIS QUEIROZ ALVES",
+    "CONTATO": 6684192466,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCOS MOREIRA XAVIER DE MENDONÇA",
+    "CONTATO": 6681005571,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO FERNANDO FRAJUCA LOPES",
+    "CONTATO": 66981217701,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VANDICO PAULO DE VASCONCELOS",
+    "CONTATO": 65998150987,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "BARRA DOS GARCAS"
+  },
+  {
+    "LOCALIZADOR": "LUIZ MACHADO",
+    "CONTATO": 6791391335,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VALERIO SOARES DAS NEVES",
+    "CONTATO": 6599696333,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE BRUM RIBEIRO",
+    "CONTATO": 65996001919,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JULIA DE LIMA BARROS HADDAD ALLI",
+    "CONTATO": 6596001919,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "TODO MATO GROSSO - MENOS colniza, vila rica, apiacas, marcelandia, aripuanã"
+  },
+  {
+    "LOCALIZADOR": "ROGERIO",
+    "CONTATO": 65999859282,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Barra dos Bugres, Tangará da Serra e Região"
+  },
+  {
+    "LOCALIZADOR": "DRA. WANESSA",
+    "CONTATO": 66992313042,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Rondonópolis"
+  },
+  {
+    "LOCALIZADOR": "OSVALDIR",
+    "CONTATO": 65992822805,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Cuiaba, Varzea Grande"
+  },
+  {
+    "LOCALIZADOR": "FABIO",
+    "CONTATO": 62981413772,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Sorriso, Sinop"
+  },
+  {
+    "LOCALIZADOR": "JONAS",
+    "CONTATO": 66996860029,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Nova Mutum, Lucas do Rio Verde, Sorriso, Sinop, Nova Ubiratã, Ipiranga do Norte, Colíder, Matupa, Peixoto de Azevedo, Tapurah e Itanhangá"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL",
+    "CONTATO": 66996815888,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Sinop"
+  },
+  {
+    "LOCALIZADOR": "FABIO",
+    "CONTATO": 66992353330,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Rondonópolis, Pedra preta, Alto garças, Itiquira, Sonora MS, Poxoréu, Primavera do leste, Campo verde, Dom Aquino, Jaciara, Juscimeira , Sao Pedro da Cipa, \nGuitatinga, Santa Elvira"
+  },
+  {
+    "LOCALIZADOR": "EMERSON",
+    "CONTATO": 65996185156,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Cuiaba"
+  },
+  {
+    "LOCALIZADOR": "ROBSON DA COSTA ALENCAR",
+    "CONTATO": 6581546382,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLAUDIOMAR",
+    "CONTATO": 66999530822,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "primavera do leste , campo verde , paranatinga,poxoreo"
+  },
+  {
+    "LOCALIZADOR": "DONIZETE RODRIGUES",
+    "CONTATO": 6692132450,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JORGE VIEGAS",
+    "CONTATO": 67992824814,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BETO",
+    "CONTATO": 6599770180,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": "Cáceres, Mirassol do Oeste, São José dos Quatros Marcos, Araputanga, Rio Branco, Jauru, Barra do Bugres, Porto Esperidião, Pontes e Lacerda, Vila Bela da Santíssima Trindade e Comodoro"
+  },
+  {
+    "LOCALIZADOR": "ADILSON CRUVINEL DE FREITAS",
+    "CONTATO": 6599375675,
+    "COMARCA": "MT",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ESCRITORIO SALIM",
+    "CONTATO": 9392182705,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "SantarémAlenquerÓbidosJurutiItaitubaMonte AlegreFaroPrainhaTerra SantaRurópolisNovo ProgressoOriximina AlmerimJacareacanga"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON",
+    "CONTATO": 9182016273,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "BELEM"
+  },
+  {
+    "LOCALIZADOR": "DILMA",
+    "CONTATO": 9192498507,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "Abaetetuba, igarapé Miri , Barcarena ,mocajuba , baião, acara, Tailândia, santa Izabel, vigia , Bragança, Viseu ,capitão poço, São Miguel, Portel, Oeiras , Breves"
+  },
+  {
+    "LOCALIZADOR": "EDIVALDO NASCIMENTO",
+    "CONTATO": 9181382001,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "BELEM,Ananindeua,Marituba ,ICOARACI ,Mosqueiro,Barcarena,Maracanã"
+  },
+  {
+    "LOCALIZADOR": "THALYSON AZEVEDO BEZERRA",
+    "CONTATO": 9181050971,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JUSCELINO FERNANDO GALUCIO GOMES",
+    "CONTATO": 91981530811,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EMERSON OLIVEIRA",
+    "CONTATO": 9491331029,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "MARABÁ, SANTANA DO ARAGUAIA, RONDON DO PARÁ, SÃO JOÃO DO ARAGUAIA, SÃO DOMINGOS DO ARAGUAIA"
+  },
+  {
+    "LOCALIZADOR": "JOAO MARIO GOES FERREIRA",
+    "CONTATO": 9182631336,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ERIKA LIMA",
+    "CONTATO": 9188571155,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "Belém, Ananindeua, Marituba, Benevides, Santa Izabel, Castanhal, Mosqueiro, Moju, Abaetetuba, Barcarena, Cametá, Santo Antônio do Tauá"
+  },
+  {
+    "LOCALIZADOR": "FLAVIO",
+    "CONTATO": 9182632110,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "BELEM"
+  },
+  {
+    "LOCALIZADOR": "MC SERVIÇO",
+    "CONTATO": 94981812475,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSAFA",
+    "CONTATO": 9491343485,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "marabá"
+  },
+  {
+    "LOCALIZADOR": "SANDRO ALVES GOMES",
+    "CONTATO": 91980612519,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDERSON BARROS DA SILVA JUNIOR",
+    "CONTATO": 91984115823,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DAVISON BARROS DA SILVA",
+    "CONTATO": 91988986372,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ELADIANE VIEGAS AJISAKA",
+    "CONTATO": 9192645078,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE SALIM CUTRIM LAUANDE",
+    "CONTATO": 93991640101,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "SANTAREM"
+  },
+  {
+    "LOCALIZADOR": "MAILSON JORGE DA SILVA SANTOS",
+    "CONTATO": 91983438293,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSMAR",
+    "CONTATO": 9391348528,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "ALTAMIRA"
+  },
+  {
+    "LOCALIZADOR": "JUSCELINO FERNANDO",
+    "CONTATO": 9181530811,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "Castanhal, Inhangapi, são Domingos do capim, São Francisco do Pará, Santo Antônio do Tauá, Santa Isabel do Pará Curuçá, Bujaru, concórdia do Pará e Marapanim. - SANTA IZABEL DO PARA"
+  },
+  {
+    "LOCALIZADOR": "LUCAS DA SILVA VICTOR",
+    "CONTATO": 91982550175,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LEANDRO JOSÉ KRUEL",
+    "CONTATO": 9981757600,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAYSSA LIMA TELES ALVES",
+    "CONTATO": 9192189189,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUÍS ANTÔNIO BARROS DE SOUZA",
+    "CONTATO": 91991054050,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MAILSON",
+    "CONTATO": 9183438293,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "BELEM"
+  },
+  {
+    "LOCALIZADOR": "ADERLAN FABIO SOUSA DOS SANTOS",
+    "CONTATO": 9182759283,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAIMUNDO ZACARIAS PINHEIRO",
+    "CONTATO": 9187191119,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "parauapebas"
+  },
+  {
+    "LOCALIZADOR": "LEONARDO",
+    "CONTATO": 9491862370,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RICARDO",
+    "CONTATO": 11986532393,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "Conceição do Araguaia, Redenção, Santana do Araguaia, Rio Maria, Xinguara, Ourilândia do Norte, Tucuma, São Feliz do Xingu"
+  },
+  {
+    "LOCALIZADOR": "ROMULO",
+    "CONTATO": 9180327646,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "PARAGOMINAS"
+  },
+  {
+    "LOCALIZADOR": "THAMYRES",
+    "CONTATO": 9492697277,
+    "COMARCA": "PA",
+    "ATUAÇÃO/ COMARCA": "Tucurui, breu branco, Goianésia, novo repartimento, Tailândia"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO PEREZ",
+    "CONTATO": 8396074566,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "patos"
+  },
+  {
+    "LOCALIZADOR": "MAXWELL DA SILVA GONCALVES",
+    "CONTATO": 8398199129,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADEILTON MORENO DA SILVA",
+    "CONTATO": 8398245721,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "CAMPINA GRANDE/ PB"
+  },
+  {
+    "LOCALIZADOR": "RICARDO DIAS",
+    "CONTATO": 8396377936,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALAIN GOMES DE OLIVEIRA",
+    "CONTATO": 8388498913,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "Belém - Caaporã - Gurinhém- Soledade- alagoa grande- Alhandra -Araruna- areia -bananeiras- Cuité-Cuité de Mamaguape- Guarabira -Ingá -Itabaiana- Jacaraú -Mamanguape- Pedras de Fogo -Picuí -Rio Tinto -Sapé- Solânea -Bayeux- Cabedelo- João Pessoa- Santa Rita- Conde- Conceição- Alagoinha -Araçagi- Barra de Santa Rosa -Cacimba de Dentro -Cruz do Espírito Santo- Lucena- Mari- -Pirpirituba- Serraria- Pilar."
+  },
+  {
+    "LOCALIZADOR": "JARDIEL CORREIA DE ANDRADE",
+    "CONTATO": 83999585749,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS ANDRE ALMEIDA GONCALVES",
+    "CONTATO": 8399102040,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "Campina Grande- Pb; Queimadas - Pb; Fagundes-Pb; Galante-Pb; Aroeiras-Pb; Boa vista-Pb; Serra Branca-Pb; Montadas-Pb;  Puxinanã-Pb; Pocinhos-Pb; Areial-Pb;  Areias-Pb; Lagoa Seca-Pb Lagoa de Roça-Pb; Esperança-Pb; Alagoa Nova-Pb; Alagoa Grande-Pb; Remigio-Pb; Sapé-Pb; Sumé; Itabaiana-Pb Ingá-Pb; Juarez Tavora-Pb; Matinhas-Pb; Solanea-Pb Barra de Santa Rosa- Pb; Arara-Pb; Picui-Pb; Boqueirão-Pb; Taperoa-Pb; São João do Cariri-Pb. Soledade; Juazeirinho."
+  },
+  {
+    "LOCALIZADOR": "JONATHAN JOSÉ SIQUEIRA RÊGO",
+    "CONTATO": 8396744391,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOÃO FERREIRA DE LIMA",
+    "CONTATO": 83998820587,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "TODA PARAIBA E TODA RIO GRANDE DO NORTE"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO PERES COELHO DA NOBREGA",
+    "CONTATO": 8396074566,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLAUDIO JOSE DA SILVA",
+    "CONTATO": 8399518866,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALISSON MELO SIQUEIRA",
+    "CONTATO": 83988469244,
+    "COMARCA": "PB",
+    "ATUAÇÃO/ COMARCA": "JOAO PESSOA"
+  },
+  {
+    "LOCALIZADOR": "ADENILSON BARBOSA DA SILVA",
+    "CONTATO": 81979045447,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GRUPO AGUIA",
+    "CONTATO": 7488210336,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "PETROLINA - LAGOA GRANDE - Santa Maria da Boa Vista - AFRÂNIO"
+  },
+  {
+    "LOCALIZADOR": "CLAUDEMIR VIEIRA",
+    "CONTATO": 8193743242,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "Abreu e Lima , Igarassu , Olinda , Itamaracá"
+  },
+  {
+    "LOCALIZADOR": "FÁBIO PETRONILO DE OLIVEIRA",
+    "CONTATO": 8196124089,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EVALDO JOSE DE SANTANA JUNIOR",
+    "CONTATO": 87988124853,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDY CARLOS FERNANDES",
+    "CONTATO": 8195262545,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "JABOATAO DOS GUARARAPES - CABO DE SANTO AGOSTINHO"
+  },
+  {
+    "LOCALIZADOR": "RAYSSA LIMA TELES ALVES",
+    "CONTATO": 8187744212,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DIEGO AUGUSTO ANDRADE OLIVEIRA",
+    "CONTATO": 8197288494,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FILIPE BEZERRA MARTINS",
+    "CONTATO": "8181171149/81981171149",
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "Paulista Olinda - Abreu e Lima"
+  },
+  {
+    "LOCALIZADOR": "HUMBERTO SANTANA",
+    "CONTATO": 8191909549,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "JABOATAO DOS GUARARAPES - RECIFE"
+  },
+  {
+    "LOCALIZADOR": "DANIEL GUEDES DE MORAES FILHO",
+    "CONTATO": 8196460525,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JEFFERSON LUIZ DA VEIGA",
+    "CONTATO": 8198643589,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "RECIFE"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL JOSE ALVES BEZERRA",
+    "CONTATO": 8195885539,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JARBES ANDRADE FERREIRA",
+    "CONTATO": 81982588029,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLEITON LAURENTINO BEZERRA",
+    "CONTATO": 8181177279,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ERNANDE MARCO",
+    "CONTATO": 81987010405,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO LEONARDO GOMES DE LIMA",
+    "CONTATO": 81994221716,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "RECIFE, JABOATÃO, OLINDA, PAULISTA, ABREU E LIMA, IGARASSU, ITAMARACÁ, CABO DE SANTO AGOSTINHO, IPOJUCA, GRAVATÁ, SÃO LOURENÇO DA MATA, CARPINA, MORENO, VITÓRIA DE SANTO ANTÃO, BEZERROS, SANTA CRUZ DO CAPIBARIBE, TORITAMA"
+  },
+  {
+    "LOCALIZADOR": "KLEUTON LORRAN",
+    "CONTATO": 8197309727,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "recife"
+  },
+  {
+    "LOCALIZADOR": "ROMULO LIRA DE MELO JUNIOR",
+    "CONTATO": 8194368711,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROBERTO",
+    "CONTATO": 8199502040,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROGÉRIO PEREIRA DE ARRUDA",
+    "CONTATO": 8199817179,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RODOLFO MORAIS DE GUSMÃO",
+    "CONTATO": 8199515457,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "Agrestina Altinho Amaraji Belém de Maria Bezerros Bonito Brejo da Madre de Deus Camocim de São Félix Caruaru Catende Cortês Cupira Gameleira Joaquim Nabuco Lagoa dos Gatos Panelas Primavera Quipapá Riacho das Almas Sairé São Caetano São Joaquim do Monte Tacaimbó Taquaritinga do Norte Toritama Vertentes Quipapá - Riacho das Almas - Sairé - Sanharó - Santa Cruz do Capibaribe - Santa Maria do Cambucá - São Caetano - São Joaquim do Monte - São Vicente Férrer - Surubim - Tacaimbó - Taquaritinga do Norte - Toritama - Verdejante - Vertentes - Vitória de Santo Antão -"
+  },
+  {
+    "LOCALIZADOR": "GILSON DE BRITO SILVA",
+    "CONTATO": 8181517356,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO JUNIOR",
+    "CONTATO": 8199832117,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDMILSON GOMES DE ALMEIDA",
+    "CONTATO": 8187801801,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "AGILIZA LOCALIZAÇÃO DE VEICULOS",
+    "CONTATO": 81983942188,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCONI FRANCISCO DA COSTA MENDES FILHO",
+    "CONTATO": 8791647933,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROGÉRIO DE PAULA E SILVA",
+    "CONTATO": 8186915862,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "TAQUARITINGA DO NORTE VERTENTES SANTA CRUZ DO CAPIBARIBE JATAUBA BREJO DA MADRE DE DEUS"
+  },
+  {
+    "LOCALIZADOR": "ZILANIO OLIMPIO DA SILVA",
+    "CONTATO": 87991446141,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "AGUAS BELAS JUPI - ALAGOINHA JUCATI - ANGELIM JUREMA - AGUÁ PRETA LAJEDO - AFOGADOS DA INGAZERA LAGOA DO OURO - BUIQUE MANARÍ - BREJÃO MARAIAL - BOM CONSELHO MIRANDIBA - BELEM DE SÃO FRANCISCO PEDRA - BETANIA PESQUEIRA - CARNAUBEIRA DA PENHA PORÇÃO - CUSTÓDIA PALMEIRINA - CALÇADOS PALMARES - CARNAIBA PETROLANDIA - CACHOEIRINHA QUIPAPA - CANHOTINHO SALOÁ - CORRENTES SERTANIA - CAPOEIRAS SANHARÓ - CAETÉS SÃO JOÃO - FLORESTA SÃO BENTO DO UNA - FLORES SERRA TALHADA - GARANHUNS SÃO JOSÉ DO BELMONTE - IATI SÃO JOSÉ DO EGITO - ITAIBÁ TUPANATINGA - INAJÁ TEREZINHA - IBIRAJUBA TACARATU - IBIMIRIM TABIRA - ITAPETIM TRIUNFO - ITACURUBA TUPARETAMA - JOAQUIM NABUCO VENTUROSA"
+  },
+  {
+    "LOCALIZADOR": "JOAO MARIO GOES FERREIRA",
+    "CONTATO": 81981744882,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "NIELSON",
+    "CONTATO": 81988847318,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "Recife e região"
+  },
+  {
+    "LOCALIZADOR": "GIRLANE DE BRITO DA SILVA",
+    "CONTATO": 81995066118,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FELIPE CABRAL",
+    "CONTATO": 81992717801,
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADENILSON (LULA)",
+    "CONTATO": "81979045447/81991484392",
+    "COMARCA": "PE",
+    "ATUAÇÃO/ COMARCA": "Limoeiro Pe, caprina,Paudalho, Tracunhaém, Nazaré da Mata, aliança, condado,Riacho das almas, cumaru, Passira,João Alfredo, Bom Jardim,Orobó,FEIRA Nova, Lagoa de itaenga, glória do Goitar, Pombos, chá grande, gravata, Surubim, são Vicente Ferrer, macaparana, vicencia, machados, Itaquitinga"
+  },
+  {
+    "LOCALIZADOR": "FRANCIEL RODRIGUES AIRES DOS SANTOS",
+    "CONTATO": 86994282625,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": "TERESINA/ TIMON-MA"
+  },
+  {
+    "LOCALIZADOR": "CASSIO FRANCISCO DA COSTA SILVA",
+    "CONTATO": 86998457404,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO HENRIQUE",
+    "CONTATO": 8698268200,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GEANDRO ENEIAS MARCHI",
+    "CONTATO": 8688979392,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO JEFFERSON BARBOSA",
+    "CONTATO": 8694829433,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": "(DEMERVAL LOBÃO)( MONSENHOR GIL)( VALENÇA DO PIAUÍ) (ALESBÃO VELOZO) (ÁGUA BRANCA)(BARRO DURO)(OEIRAS) (PICOS)(ITAUEIRAS) (SIMÕES) (FRONTEIRAS)(SÃO PEDRO DO PIAUÍ)(PARNARAMA) ( AMARANTE) (FLORIANO) (GERUMENHA)(GILBUÉS) (CORRENTE) (URUÇUÍ)(RIBEIRO GONÇALVES)(SÃO RAIMUNDO NONATO)(CARACOL)( SÃO JOÃO DO PIAUÍ) (CANTO DO BURITI))(BOM JESUS) ( CRISTIANO CASTRO) (ALTOS) (CAMPO MAIOR) (CAPITÃO DE CAMPOS) (PIRIPIRI) (PIRACIRUCA) (BURITI DOS LOPES) (PARNAÍBA) (LUIZ CORREIA) (JOSÉ DE FREITAS) (BARRAS) (BATALHA) (ESPERANTINA) (UNIÃO) (MIGUEL ALVES) (PORTO)"
+  },
+  {
+    "LOCALIZADOR": "ALBERTIEL DE SOUSA PEREIRA",
+    "CONTATO": 8999285571,
+    "COMARCA": "PI",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABIANO DANIEL DAL PISOL",
+    "CONTATO": 45999549341,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JÁFFEL ANTÔNIO CRESCÊNCIO",
+    "CONTATO": 4796703651,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADEMIR CUSTODIO DA SILVA",
+    "CONTATO": 4499619917,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "MARINGA - MANDAGUARI - MARIALVA - PAICANDU - PAIÇANDU - SARANDI - NOVA ESPERANÇA - NOVA ESPERANCA - ALTO PARANA - PARANAVAI - APUCARANA - JANDAIA DO SUL - PARANACITY - ASTORGA - Uniflor"
+  },
+  {
+    "LOCALIZADOR": "PEDRO PAULO ROTTA BONFIM",
+    "CONTATO": 44999113326,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HELTON PACHECO",
+    "CONTATO": 41997442006,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOÃO EDINEI ZENZELUK",
+    "CONTATO": 4299681969,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAFAEL FERNANDO BASTOS DOLIS",
+    "CONTATO": 44999037117,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE CARLOS DA SILVA",
+    "CONTATO": 41997118142,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FERNANDO CAMARGO DE FRANÇA",
+    "CONTATO": 41998463895,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LAUDESNEI FELIPE BRITO",
+    "CONTATO": 43999984447,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDSON DOMINGOS DA CUNHA",
+    "CONTATO": 43996928006,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "AMILTON JOSE GROBES",
+    "CONTATO": 45999319100,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Assis Chateaubriand Cantagalo Capanema Capanema Capitão L. Marques Cascavel Catanduvas Chopinzinho Dois Vizinhos Francisco Beltrão Guairá Guaraniaçu Laranjeiras do sul Marechal C. Rondom Matelândia Medianeira Palmital Palotina Pato Branco Pitanga Realeza Salto do Lontra Santa Helena Sao Miguel do Iguaçu Terra Roxa Toledo Umuarama"
+  },
+  {
+    "LOCALIZADOR": "DAVID LEONARDI",
+    "CONTATO": 44999878077,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUIZ ANTONIO MORAIS",
+    "CONTATO": 41999178918,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDERSON AGUIAR",
+    "CONTATO": 4399009680,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "ATENDIDAS • LONDRINA • CAMBÉ • ROLÂNDIA • ASTORGA • ARAPONGAS • APUCARANA • MARILÂNDIA DO SUL • JANDAIA DO SUL • IBIPORÃ • URAÍ • BELA VISTA DO PARAÍSO • JAGUAPITÃ • PORECATU• SERTANÓPOLIS • PRIMEIRO DE MAIO • CORNÉLIO PROCÓPIO • ASSAI • CONGOINHAS • NOVA FÁTIMA • RIBEIRÃO DO PINHAL • SANTA MARIANA • BANDEIRANTES • CAMBARA • JACAREZINHO • SANTO ANTONIO DA PLATINA • ANDIRA • JOAQUIM TÁVORA • CARLÓPOLIS • RIBEIRÃO CLARO • TOMAZINA • IBAITI• CURIÚVA • TELÊMACO BORBA • ORTIGUEIRA • SÃO JERONIMO DA SERRA • FAXINAL • GRANDES RIOS • SÃO JOÃO DO IVAÍ • IVAIPORÃ • MANOEL RIBAS • JAGUARIAÍVA • CENTENÁRIO DO SUL • COLORADO • SANTA FÉ • LOANDA"
+  },
+  {
+    "LOCALIZADOR": "BRUNO SERRA DE MEDEIROS",
+    "CONTATO": 4199383393,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "curitiba"
+  },
+  {
+    "LOCALIZADOR": "GENESIS JORDAN TALES TEIXEIRA DE JESUS",
+    "CONTATO": 4198369362,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROGERIO CESAR ZEZILIA",
+    "CONTATO": 41998986832,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS VACCARO",
+    "CONTATO": 4499657529,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Maringa sarandi marialva mandaguari jandaia do sul apucarana astorga santa fe colorado paranacity mandsguacu nova esperanca paranavai cidade gaucha cianorte cruzeiro do oeste umuarama goio ere campo mourao"
+  },
+  {
+    "LOCALIZADOR": "CASSIANO RODRIGO GARCIA DOS REIS",
+    "CONTATO": 45991167111,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "TOLEDO"
+  },
+  {
+    "LOCALIZADOR": "CLAUDIA VIVIANE",
+    "CONTATO": 4196971720,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "RIO BRANCO DO SUL - ITAPERUCU"
+  },
+  {
+    "LOCALIZADOR": "DIEGO PAES DA SILVA",
+    "CONTATO": 41995034109,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Curitiba Colombo e fazenda rio grande"
+  },
+  {
+    "LOCALIZADOR": "ERIVELTON MENDONÇA",
+    "CONTATO": 41991855393,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Paranaguá Antonina Guaraqueçaba Guaratuba Matinhos Morretes Pontal do Paraná"
+  },
+  {
+    "LOCALIZADOR": "ISMAEL",
+    "CONTATO": 4491232483,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO CESAR GONCALVES - PR",
+    "CONTATO": 41996465100,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EVANDRO CRISTINO SILVA",
+    "CONTATO": 41999585937,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "curitiba e região metropolitana PIRAQUARA"
+  },
+  {
+    "LOCALIZADOR": "FABIANO FERREIRA",
+    "CONTATO": 4591064699,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "CASCAVEL ,TOLEDO ,SANTA HELENA , CORBELIA ,NOVA AURORA ,CAFELÂNDIA ,MEDIANEIRA , UBIRATÃ , ASSIS CHATEAUBRIAND PR,TOLEDO PR,CÉU AZUL PR, SÃO MIGUEL PR,,QUEDAS DO IGUAÇU MATELÂNDIA PR MISSAL ITAIPULÂNDIA MARECHAL RONDON PR JESUÍTAS PR CAP LEÔNIDAS MARQUES CATANDUVA PR, IBEMA PR, GUANIAÇU PR, SANTA TERESINHA ,FOZ DO IGUAÇU PR"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO DE LIMA MENDES",
+    "CONTATO": 44999221150,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "PAICANDU"
+  },
+  {
+    "LOCALIZADOR": "GUILHERME MARINHO",
+    "CONTATO": 4291180201,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "- Ponta Grossa (base) - Carambeí - Castro - Pirai do Sul - Jaguariaíva - Palmeira - Teixeira Soares - Fernandes Pinheiro - Irati - Inácio Martins - Imbituva - Prudentópolis - Guamiranga - Tibagi - Imbaú - Telêmaco Borba - Rebouças - Rio Azul"
+  },
+  {
+    "LOCALIZADOR": "GILMAR SANTIAGO",
+    "CONTATO": 4799471070,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "REGINALDO CESAR GORI",
+    "CONTATO": 4499236738,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE MONTOIA CODOLO",
+    "CONTATO": 44999925203,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO MENARCZUK",
+    "CONTATO": 4299126164,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "ponta grossa"
+  },
+  {
+    "LOCALIZADOR": "JOSE AILTON",
+    "CONTATO": 4399146499,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "CURITIBA - ALMIRANTE TAMANDARÉ - COLOMBO - CAMPO LARGO - ARAUCÁRIA - FAZENDA RIO GRANDE"
+  },
+  {
+    "LOCALIZADOR": "JOSE CARLOS",
+    "CONTATO": 41997118142,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE CARLOS PEREIRA",
+    "CONTATO": 41991854808,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "CAMPINA GRANDE, COLOMBO, ALMIRANTE TAMANDARÉ, QUATRO BARRAS"
+  },
+  {
+    "LOCALIZADOR": "CELSO FABIANSKI SCHRODER",
+    "CONTATO": 41991991302,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDERSON AGUIAR FRANCISCO",
+    "CONTATO": 43999009680,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MATHEUS SANTOS DE OLIVEIRA",
+    "CONTATO": 41999065404,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "NICOLAS CAZURA GUREK",
+    "CONTATO": 4187508042,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSIMAR",
+    "CONTATO": 4197004275,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "curitiba e região metropolitana"
+  },
+  {
+    "LOCALIZADOR": "LEANDRO FERREIRA",
+    "CONTATO": 4388196596,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "IVAIPORA - JARDIM ALEGRE - LUNARDELI - SAO JOAO DO AVAI - GODOY MOREIRA - CRUSMALTINA -FAXINAL - BORRAZOPOLIS - RIO BRANCO DO IVAI - GRANDES RIOS - ARAPUA - ARIRANHA DO IVAI -MANOEL RIBAS - CANDIDO DE ABREU - PITANGA - NOVA TEBAS"
+  },
+  {
+    "LOCALIZADOR": "WERTON CANDIDO RIBEIRO",
+    "CONTATO": 41985050772,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDVAR DOS SANTOS",
+    "CONTATO": 4599719894,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALTAIR DOS SANTOS",
+    "CONTATO": 42999439215,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE HENRIQUE AFONSO",
+    "CONTATO": 43999726611,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LENICE",
+    "CONTATO": 4188124571,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "- Ponta Grossa- Carambeí- Castro- Piraí do Sul- Jaguaraíva- Telêmaco Borba- Tibagi- Imbaú- Ipiranga- Prudentópolis- Guarapuava- Pinhão- Imbituva- Teixeira Soares- Irati- Rebouças- Fernandes Pinheiros - Palmeira"
+  },
+  {
+    "LOCALIZADOR": "CLEITON WILSON UMBELINO",
+    "CONTATO": 43984857568,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUIZ ANTONIO",
+    "CONTATO": 4199178918,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Curitiba, Almirante Tamandaré, São José dos Pinhais, Pinhais, Colombo, Piraquara, Araucária, Fazenda Rio Grande, Bocaiúva do Sul, Campina Grande do Sul, Quatro Barras, Palmeira, Campo Largo, Balsa Nova, Cerro Azul, Campo Magro São João do Triunfo Ponta Grossa Castro Carambei Jaguariaiva Apucarana Cambé Jaguapitã Cornélio Procópio Bandeirantes"
+  },
+  {
+    "LOCALIZADOR": "FABIANO FERREIRA DE CAMPOS",
+    "CONTATO": 45991064699,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WELLINGTON CANDIDO RIBEIRO",
+    "CONTATO": 41996391295,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUIZ ANTONIO MORDASKI",
+    "CONTATO": 47988520880,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Rio Negro (Campo do Tenente, Quitandinha, Pien), Lapa (Contenda), São Mateus do Sul (Antonio Olinto), Mallet (Paulo Frontin, Rio Azul, Dorizon), Fernandes Pinheiro, Rebouças, São João do Triunfo, União da Vitória (Bituruna, General Carneiro, Porto Vitória, Cruz Machado)"
+  },
+  {
+    "LOCALIZADOR": "LUIZ BIASSON",
+    "CONTATO": 4498432997,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "MARINGÁ – SARANDI – MARIALVA – MANDAGUARI – JANDAIA DO SUL – APUCARANA – ARAPONGAS – ASTORGA – SANTA FÉ – COLORADO – PARANACITY – NOVA - ESPERANÇA – PARANAVAÍ – LOANDA – NOVA LONDRINA – MANDAGUAÇU – CIANORTE – CRUZEIRO DO OESTE – UMUARAMA – PÉROLA – XAMBRÊ – GUAÍRA – ICARAÍMA – ALTÔNIA – IPORÃ – PARAÍSO DO NORTE – CIDADE GAÚCHA – CAMPO MOURÃO – GOIOERÊ – IVAIPORÃ."
+  },
+  {
+    "LOCALIZADOR": "JOAO HUCALO MENARCZUK",
+    "CONTATO": 42999126164,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLAUDIA VIVIANE SANTANA",
+    "CONTATO": 41996971720,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MATHEUS",
+    "CONTATO": 4199065404,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "fazenda Rio Grande, xaxim, boqueirao, sitio cercado"
+  },
+  {
+    "LOCALIZADOR": "JOSE AILTON BOLONHEZI",
+    "CONTATO": 43999146499,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DEIVISSON ENES DO NASCIMENTO",
+    "CONTATO": 41988954046,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "NELSON ANTONIO ROBETTI",
+    "CONTATO": 4691020858,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Palmas. Clevelandia. Pato Branco. Francisco beltrao. Ampere. Santo antonio do sudoeste. Capanema. Salto do lontra. Dois VIZINHOS. Sao João. Coronel vivida. Chopinzinho. Mangueirinha"
+  },
+  {
+    "LOCALIZADOR": "MISAEL ATILIO GOMES",
+    "CONTATO": 41974006113,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LOKKUS (PARANÁ)",
+    "CONTATO": 18981763535,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "- ALVORADA DO SUL e região \n- PORECATU e região \n- CENTENÁRIO DO SUL e região \n- LUPINÓPOLIS e região \n- CAFEARA e região \n- SANTO INÁCIO e região \n- ITAGUAJÉ e região \n- PARANAPOEMA e região \n- COLORADO e região \n- PRIMEIRO DE MAIO e região \n- BELA VISTA DO PARAÍSO e região \n- RANCHO ALEGRE e região"
+  },
+  {
+    "LOCALIZADOR": "OILSON",
+    "CONTATO": 4599190688,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "ALTONIA - AMPERE - ASSIS CHATEAUBRIAND - CAMPINA DA LAGOA - CAPANEMA - CAPITÃO LEONIDAS MARQUES - CASCAVEL***COM PRIORIDADE** - CATANDUVAS - CORBELIA - FORMOSA DO OESTE - FOZ DO IGUAÇU***COM PRIORIDADE* - FRANCISCO BELTRÃO - GOIOERE - GUAIRA - GUARANIAÇU - IPORÃ - LARANJEIRAS DO SUL - MARECHAL CANDIDO RONDON - MATELANDIA - MEDIANEIRA - NOVA AURORA***COM PRIORIDADE** - PALOTINA - QUEDAS DO IGUAÇU - REALEZA - SALTO DO LONTRA - SANTA HELENA - SÃO MIGUEL DO IGUAÇU - TERRA ROXA - TOLEDO***COM PRIORIDADE** - UBIRATÃ -"
+  },
+  {
+    "LOCALIZADOR": "HILTON HEINRICH",
+    "CONTATO": 47999880031,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WILLIAN PEREZ OLIVEIRA",
+    "CONTATO": 43998436205,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO GONÇALVES",
+    "CONTATO": 4196465100,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Antonina - Morretes - Paranagua - Pontal do Parana - São Jose dos Pinhais - Piraquara - Pinhais"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO LEITE",
+    "CONTATO": 4497592976,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Paranavaí - Alto Paraná - Paraíso do Norte - nova esperança - Nova Londrina - terra rica Loanda"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO NUNES",
+    "CONTATO": 4195009900,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "curitiba"
+  },
+  {
+    "LOCALIZADOR": "ROGERIO MOAS",
+    "CONTATO": 4198986832,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Curitiba e Colombo"
+  },
+  {
+    "LOCALIZADOR": "CELSO",
+    "CONTATO": 4191991302,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Curitiba e região metropolitana:\nLapa\nAraucária\nBalsa nova\nCampo largo \nFazenda Rio Grande \nMandirituba \nQuitandinha \nSão José dos Pinhais \nPiraquara \nPinhais \nQuatro barras\nCampina Grande do Sul \nBocaiuva \nColombo \nAlmirante Tamandaré \nItaperuçu \nRio Branco do Sul"
+  },
+  {
+    "LOCALIZADOR": "WILIAN MORITZ KOROBINSKI",
+    "CONTATO": 4291554742,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DENI",
+    "CONTATO": 41996926093,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Araucaria"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO NUNES SILVA",
+    "CONTATO": 41995009900,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BRUNO SERRA",
+    "CONTATO": 41999383393,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Curitiba e região metropolitana"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO",
+    "CONTATO": 44999221150,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Guarapuava Francisco Beltrao Medianeira \nRealeza Foz do Iguaçu Toledo Cascavel Quedas do Iguaçu Marechal candido rondon"
+  },
+  {
+    "LOCALIZADOR": "SANTANA",
+    "CONTATO": 43991858001,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "LONDRINA E REGIÃO"
+  },
+  {
+    "LOCALIZADOR": "AÉRCIO WILTON PALMA BACHISTE",
+    "CONTATO": 44991663355,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCIO LEANDRO SORDI",
+    "CONTATO": 44999627137,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HEMERSON DOS SANTOS",
+    "CONTATO": 47997201248,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "porto união / canoinhas"
+  },
+  {
+    "LOCALIZADOR": "THIAGO",
+    "CONTATO": 4399818313,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Andirá ,Canbará ,Bandeirantes, Jacarezinho ,Santo Antônio da platina ,Cornelio procopio,Joaquim Távora ,Ribeirao claro ,Carlopolis"
+  },
+  {
+    "LOCALIZADOR": "CASSIANO RODRIGO GARCIA DOS REIS",
+    "CONTATO": 45991167111,
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "Toledo, Guíara e região"
+  },
+  {
+    "LOCALIZADOR": "BRUNO SILVA COELHO",
+    "CONTATO": 21982148176,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO LOMBA",
+    "CONTATO": 21988645792,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "FR. MEIER, RIO DE JANEIRO, MEIER, MADUREIRA , FR. MADUREIRA - FR. DO MEIER - FORO CENTRAL"
+  },
+  {
+    "LOCALIZADOR": "ANA PAULA CORREIA FONSECA",
+    "CONTATO": 2137410561,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "NITERÓI - REGIÃO OCEANICA - MARICÁ - SÃO GONÇALO - ALCANTARA - ITABORAÍ"
+  },
+  {
+    "LOCALIZADOR": "ANDERSON GONZAGA COELHO",
+    "CONTATO": 21999084125,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "TERESOPOLIS"
+  },
+  {
+    "LOCALIZADOR": "BRUNO BARROS",
+    "CONTATO": 3288348612,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "sapucaia. carmo. duas barras. cantagalo. cordeiro. bom jardim. nova friburgo. sao sebastiao do alto. santa maria madalena. trajano de moraes. sumidouro"
+  },
+  {
+    "LOCALIZADOR": "BRUNO DA SILVA COELHO",
+    "CONTATO": 21964157079,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "FR. DE JACAREPAGUA - FR. BARRA DA TIJUCA"
+  },
+  {
+    "LOCALIZADOR": "CELSO BARRETO DE SOUZA",
+    "CONTATO": 22988577525,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "CAMPOS DOS GOYTACAZES"
+  },
+  {
+    "LOCALIZADOR": "DANIEL DE ALMEIDA SOARES",
+    "CONTATO": 21964570425,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "FR. DA ILHA DO GOVERNADOR - FR. BANGU - FR. ILHA DO GOVERNADOR - MAGE - SEROPEDICA - FORO REGIONAL DE BANGU -"
+  },
+  {
+    "LOCALIZADOR": "DANIELLE BARRETO DA SILVA",
+    "CONTATO": 21984680002,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "FORO REGIONAL DE SANTA CRUZ/RJ (SÓ MEDIANTE PGT DE 60$)"
+  },
+  {
+    "LOCALIZADOR": "EMILIO CARLOS GOMES",
+    "CONTATO": 21972837790,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "ITABORAI , NOVA FRIBURGO - SANTA CRUZ"
+  },
+  {
+    "LOCALIZADOR": "FABIO PEREIRA DE SOUZA",
+    "CONTATO": 21964759050,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "FR. CAMPO GRANDE, DUQUE DE CAXIAS, FR. DE CAMPO GRANDE - leopoldina - FR. SANTA CRUZ"
+  },
+  {
+    "LOCALIZADOR": "JACQUELINE FATIMA XAVIER",
+    "CONTATO": 21964942322,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "JAPERI/NILOPOLIS"
+  },
+  {
+    "LOCALIZADOR": "JARBAS GUIMARAES",
+    "CONTATO": 24988461548,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "BARRA DO PIRAI - VOLTA REDONDA"
+  },
+  {
+    "LOCALIZADOR": "JORGE CARVALHO JUNIOR",
+    "CONTATO": 21972398445,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "GUAPIMIRIM - COBRA NEGATIIVA"
+  },
+  {
+    "LOCALIZADOR": "JOSUE DOS SANTOS NUNES",
+    "CONTATO": 21964249614,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "NOVA IGUACU - SAO JOAO DE MERITI - BELFORD ROXO - MESQUITA -"
+  },
+  {
+    "LOCALIZADOR": "LUISMAR",
+    "CONTATO": 21964634383,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Maricá - Teresópolis"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL JOSÉ ROCHA",
+    "CONTATO": 28999122799,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Natividade, RJ - Porciúncula, RJ - Itaperuna, RJ - Bom Jesus do Itabapoana, RJ - Italva, RJ - Cardoso Moreira, RJ"
+  },
+  {
+    "LOCALIZADOR": "ROSANE FEITOZA SANTOS MOSCOWITCH",
+    "CONTATO": 22999115683,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "RIO DAS OSTRAS"
+  },
+  {
+    "LOCALIZADOR": "TATIANE ARAUJO DE SOUZA",
+    "CONTATO": 22999925262,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "CABO FRIO , SAO PEDRO DA ALDEIA , ARMACAO DOS BUZIOS ,"
+  },
+  {
+    "LOCALIZADOR": "VINICIUS SIAS COUBE",
+    "CONTATO": 21982153070,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "SAO GONCALO - NITEROI"
+  },
+  {
+    "LOCALIZADOR": "BRUNO",
+    "CONTATO": 21964157079,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Capital, Jacarepaguá e Barra da Tijuca"
+  },
+  {
+    "LOCALIZADOR": "CELSO",
+    "CONTATO": 22988577525,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Campos dos Goytacazes, São João da Barra, São Francisco do Itabapoana, Conceição de Macabu, Quissamã/Carapebus, São Fidélis, Cambuci, Santo Antônio de Pádua, Itaócara, Miracema, Lajes do Muriaé, Itaperuna, Natividade, Porciúncula, Bom Jesus do Itabapoana, Italva/Cardoso Moreira"
+  },
+  {
+    "LOCALIZADOR": "JARBAS",
+    "CONTATO": 24981359999,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "varios locais de RJ verificar com a estagiaria Carol"
+  },
+  {
+    "LOCALIZADOR": "ROMARIO",
+    "CONTATO": 22999383618,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Araruama, Iguaba Grande, São Pedro da Aldeia, Cabo Frio, Búzios, Arraial do Cabo"
+  },
+  {
+    "LOCALIZADOR": "EDSON",
+    "CONTATO": 21995199157,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "capital, Leopoldina , Madureira e Méier"
+  },
+  {
+    "LOCALIZADOR": "MARCUS",
+    "CONTATO": 21964183681,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "campo grande, Bangu e Santa Cruz"
+  },
+  {
+    "LOCALIZADOR": "CLAUDIA",
+    "CONTATO": 21982570093,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Madureira, Ilha do Governador, Leopoldina, Meier"
+  },
+  {
+    "LOCALIZADOR": "EMIR",
+    "CONTATO": 21964196398,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Nova Iguaçú, Duque de Caxias, Capital, Ilha do governador, Niterói, são Gonçalo, Magé."
+  },
+  {
+    "LOCALIZADOR": "ALESSANDRO LOMBA",
+    "CONTATO": 21988645792,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "capital, atendo na capital e nas regionais do meier e Madureira"
+  },
+  {
+    "LOCALIZADOR": "DANIEL DE ALMEIDA SOARES",
+    "CONTATO": 21970424280,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Itaguaí, Seropédica, Santa Cruz, Bangu, Queimados, Nilópolis, Mesquita, \nIlha do governador"
+  },
+  {
+    "LOCALIZADOR": "FABIANO",
+    "CONTATO": 21970424280,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Leopoldina"
+  },
+  {
+    "LOCALIZADOR": "FABIO",
+    "CONTATO": 21964759050,
+    "COMARCA": "RJ",
+    "ATUAÇÃO/ COMARCA": "Campo Grande"
+  },
+  {
+    "LOCALIZADOR": "KENNEDY FERREIRA DOS SANTOS",
+    "CONTATO": 8487435907,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO LEONARDO GOMES LIMA",
+    "CONTATO": 8498418557,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO PAULO",
+    "CONTATO": 8496071951,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": "TODO ESTADO"
+  },
+  {
+    "LOCALIZADOR": "GUSTAVO BEZERRIL",
+    "CONTATO": 84991173961,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": "NATAL / santo antonio / SAO JOSE DE MIPIBU , PARNAMIRIM , SAO JOSE DO MIPIBU"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO PAULO DA SILVA",
+    "CONTATO": 8491778706,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUIZ CARLOS CAETANO",
+    "CONTATO": 8496292759,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CHEYSOM MURYLLU FERREIRA",
+    "CONTATO": 8496579540,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO PAULO",
+    "CONTATO": 84996071951,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ELIEL VERISSIMO DE SOUSA JUNIOR",
+    "CONTATO": 8481835910,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO",
+    "CONTATO": 8496071951,
+    "COMARCA": "RN",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDILAINE RICARDO FERREIRA",
+    "CONTATO": 6992906365,
+    "COMARCA": "RO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "J.SALES LOCALIZAÇÕES",
+    "CONTATO": 69992520803,
+    "COMARCA": "RO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ADEMAR DE JESUS FERREIRA",
+    "CONTATO": 6992901302,
+    "COMARCA": "RO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE MANOEL SOARES PEREIRA",
+    "CONTATO": 6992111842,
+    "COMARCA": "RO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSE PETRONIO RIBEIRO BRAGADO",
+    "CONTATO": 6999515431,
+    "COMARCA": "RO",
+    "ATUAÇÃO/ COMARCA": "PORTO VELHO"
+  },
+  {
+    "LOCALIZADOR": "DIEGO SANTOS",
+    "CONTATO": 95991391767,
+    "COMARCA": "RR",
+    "ATUAÇÃO/ COMARCA": "Boa Vista (capital) - Alto Alegre - Rorainopolis - Pacaraima - Caracaraí - São Luiz do Anaua - Bonfim - Mucajaí"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO CARLOS DOS SANTOS",
+    "CONTATO": 9591333299,
+    "COMARCA": "RR",
+    "ATUAÇÃO/ COMARCA": "todas as comarcas de Roraima - BOA VISTA"
+  },
+  {
+    "LOCALIZADOR": "MARCOS BATISTA RIBEIRO",
+    "CONTATO": 6992150180,
+    "COMARCA": "RR",
+    "ATUAÇÃO/ COMARCA": "Ariquemes Cujubim Rio Crespo Monte Negro Alto Paraiso Cacaulandia Buritis Campo Novo Jaru Gov. Jorge Teixeira Theobroma Machadinho D'oeste Vale do Anari 5º BEC"
+  },
+  {
+    "LOCALIZADOR": "GILSON PEREIRA",
+    "CONTATO": 5199987856,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Arroio do Meio eLajeado"
+  },
+  {
+    "LOCALIZADOR": "ROSANI CORTES",
+    "CONTATO": 5197463606,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "ARROIO DO TIGRE, CACHOEIRA DO SUL, CANDELÁRIA, ENCRUZILHADA DO SUL, RIO PARDO, SANTA CRUZ DO SUL, SOBRADINHO, TAQUARI e VERA CRUZ"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE BRUN",
+    "CONTATO": 54999481001,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "sapucaia do sul , gravatai , CACAPAVA DO SUL - ARROI GRANDE - BAGE - CANDIOTA - CAÇAPAVA DO SUL - CAMAQUÃ - CANGUÇU - DOM PEDRO - HERVAL DO SUL - JAGUARÃO - PEDRO OSORIO - PELOTAS - PINHEIRO MACHADO - PIRATINI - - ROSARIO DO SUL - SANTA VITORIA DO PALMAR - SANTANA DO LIVRAMENTO - SAO GABRIEL - SAO JOSE DO NORTE - SAO LOURENÇO DO SUL - Tapes"
+  },
+  {
+    "LOCALIZADOR": "FELIPE DA LUZ PEREIRA",
+    "CONTATO": 5182683262,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "SOMENTE ENTREGA AMIGÁVEL"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE QUADRO PORTO",
+    "CONTATO": 53981183888,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "santana do livramento - RIO GRANDE - PELOTAS"
+  },
+  {
+    "LOCALIZADOR": "LEANDRO STENSMANN",
+    "CONTATO": 5181802167,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Alvorada, Porto Alegre, Canoas, Cachoeirinha, Sapucaia, São Gabriel, Esteio, São Leopoldo, Novo Hamburgo, Campo Bom, Três Coroas, Igrejinha, Gramado, Canela, Caxias do Sul,\nBento Gonçalves, Nova Petrópolis, Estância Velha, Dois irmãos, Taquara, Ivoti, Tramandaí, Imbé, cidreira, Capão da Canoa, Torres Osório, São S. Do Caí e Santo Antônio da Patrulha."
+  },
+  {
+    "LOCALIZADOR": "CARLOS ALFREDO CARNEIRO VIANA",
+    "CONTATO": 5599837161,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Panambi, Palmeira das Missões, Seberi, Frederico Westphalen, Irai, Rodeio Bonito, Planalto, Ronda Alta, Nonoai, Sarandi e Não me Toque"
+  },
+  {
+    "LOCALIZADOR": "JIANI CERBARO",
+    "CONTATO": 5499265359,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "PASSO FUNDO/RS, ERECHIM/RS, CARAZINHO/RS, SARANDI/RS, NÃO ME TOQUE/RS, TAPERA/RS, ESPUMOSO/RS, SOLEDADE/RS, RONDA ALTA/RS NONOAI/RS GETULIO VARGAS/RS, TAPEJARA/RS, SANANDUVA/RS, LAGOA VERMELHA/RS, MARAU/RS, CASCA/RS, NOVA PRATA/RS VACARIA/RS SÃO JOSÉ DO OURO/RS, SALTO DO JACUI/RS SANTA BÁRBARA DO SUL/RS, GAURAMA/RS, MARCELINO RAMOS/RS, PLANALTO/RS, FREDERICO WESTSFALEN/RS, GAURAMA/RS, IBIRUBA/RS, PANAMBI/RS, PALMEIRA DAS MISSÕES/RS E CONSTANTINA RS, CONSTANTINA/RS"
+  },
+  {
+    "LOCALIZADOR": "JEAN RS",
+    "CONTATO": 51999682316,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CRISTIANO ALMEIDA",
+    "CONTATO": 5481289131,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Vacaria, Bom Jesus, Lagoa Vermelha, Sananduva, São José do Ouro"
+  },
+  {
+    "LOCALIZADOR": "DILTON AMIR",
+    "CONTATO": 55999911515,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Uruguaiana, Alegrete, Itaqui e São Borja SANTO ANGELO"
+  },
+  {
+    "LOCALIZADOR": "JOSE LUIS COSTA FOSSA",
+    "CONTATO": 5197973626,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDER JARDIM FERREIRA",
+    "CONTATO": 51984355770,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Porto Alegre Viamão Alvorada Cachoeirinha Gravataí Eldorado do sul Canoas Esteio Sapucaia do Sul São leopldo Novo Hamburgo Estancia Velha Portão Igrejinha Campo Bom Sapiranga Parobe Taquara Tres Coroas São Sebastião do cai"
+  },
+  {
+    "LOCALIZADOR": "ADALBERTO MENEGUZZI",
+    "CONTATO": 5198191898,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Porto Alegre Canoas Sapucaia do sul Cachoeirinha Gravataí e Alvorada."
+  },
+  {
+    "LOCALIZADOR": "ENRIQUE DENARDIN",
+    "CONTATO": 5599763972,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "AGUDO - CACEQUI - CAÇAPAVA DO SUL - FAXINAL DO SOTURNO - JAGUARI - JULIO DE CASTILHOS - RESTINGA SECA - SANTA MARIA - SANTIAGO - SÃO PEDRO DO SUL - SÃO SEPÉ - SÃO VICENTE DO SUL- TUPANCIRETÃ"
+  },
+  {
+    "LOCALIZADOR": "GUILHERME MUCCILLO",
+    "CONTATO": 5198981249,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Porto Alegre Canoas Esteio Sapucaia São Leopoldo Novo Hamburgo Dois irmãos Estância velha IVoti Sapiranga Campo bom Alvorada Gravataí Viamao Litoral (verificar comarca) Santo Antônio da patrulha *demais comarcas do estado verificar"
+  },
+  {
+    "LOCALIZADOR": "LUCIANO FREDERICH DA COSTA",
+    "CONTATO": 5584387419,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "SAO BORJA"
+  },
+  {
+    "LOCALIZADOR": "PAULO ROBERTO DOS SANTOS",
+    "CONTATO": 51996179934,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "OSORIO"
+  },
+  {
+    "LOCALIZADOR": "SIDINEI BORGES",
+    "CONTATO": 54996015046,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Passo fundo , marau , casca , Guaporé, nova prata , carazinho, Sarandi ,ronda alta, Nonoai, tapera, espumoso, não me toque , Soledade , Getúlio Vargas, Erechim, Marcelino Ramos, tapejara, Sananduva, lagoa vermelha e as vez atendo vacaria"
+  },
+  {
+    "LOCALIZADOR": "JEAN IANOV",
+    "CONTATO": 5199682316,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Canoas Esteio Sapucaia do Sul São Leopoldo Novo Hamburgo Estância velha Campo Bom Ivoti Dois irmãos Sapiranga Gravataí Cachoeirinha"
+  },
+  {
+    "LOCALIZADOR": "PEDRO CEZAR",
+    "CONTATO": 5596322945,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Santa Rosa"
+  },
+  {
+    "LOCALIZADOR": "PEDRO CEZAR DUARTE DE ALMEIDA",
+    "CONTATO": 55996322945,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "SAO LUIZ GONZAGA - SANTA ROSAA"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL MOURA",
+    "CONTATO": 7187172765,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Salvador Simões Filho Santo Amaro Lauro de Freitas"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO SEVERO PIMENTEL",
+    "CONTATO": 51992185469,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "- Porto Alegre - Alvorada - Viamão - Canoas - Esteio - Sapucaia do Sul - São Leopoldo - Novo Hamburgo - Eldorado do Sul - Guaíba - Cachoeirinha - Montenegro - Portão - Ivoti - Campo Bom - Estância Velha - Sapiranga. // Litoral com parceiro / funcionário na região: - Palmares do Sul - Osório - Santo Antônio da Patrulha - Tramandaí - Terra de Areia - Capão da Canoa - Torres. - FR. TRISTEZA - FR. SARANDI -"
+  },
+  {
+    "LOCALIZADOR": "DANIEL ANTONIO BRUM",
+    "CONTATO": 51995864520,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SANTO AFONSO",
+    "CONTATO": 5496689805,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Caxias do Sul RS, FLORES da Cunha RS, Antônio Prado RS, São Marcos RS, Vacaria RS, bom Jesus RS, São Sebastião do cai rs, São Francisco de Paula RS, canela RS, Nova Petrópolis RS, feliz RS, Garibaldi RS, Carlos barbosa rs,farroupilha rs, Bento Gonçalves rs, Veranópolis rs e nova prata RS"
+  },
+  {
+    "LOCALIZADOR": "LUIZ ENRIQUE DENARDIN",
+    "CONTATO": 55999763972,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SIDNEI BORGES",
+    "CONTATO": 5496015046,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": "Passo fundo , marau , casca , Guaporé, nova prata , carazinho, Sarandi ,ronda alta, Nonoai, tapera, espumoso, não me toque , Soledade , Getúlio Vargas, Erechim, Marcelino Ramos, tapejara, Sananduva, lagoa vermelha e as vez atendo vacaria"
+  },
+  {
+    "LOCALIZADOR": "UBIRATAN JOSE CAMARGO",
+    "CONTATO": 54999739524,
+    "COMARCA": "RS",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANGELO PERUFFO RODRIGUES",
+    "CONTATO": 48999219693,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "CAMPOS NOVOS - FLORIANOPOLIS"
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE ALEXANDER CARDOSO DE CAMARGO",
+    "CONTATO": 4898199462,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JEFERSON ANDRE DE RAMOS",
+    "CONTATO": 49999838963,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLEBEUMAR DA ROSA",
+    "CONTATO": 4791701086,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "joinville"
+  },
+  {
+    "LOCALIZADOR": "CLEDSON IVAM ROSALINO",
+    "CONTATO": 4998098336,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Videira - Fraiburgo - Tangará - Lebon Régis - Caçador - Anita Garibaldi - Capinzal - Joaçaba - Herval do oeste - Catanduvas - Santa Cecília - Campos Novos"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO HESSE FILHO",
+    "CONTATO": 47999237092,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "BRUSQUE"
+  },
+  {
+    "LOCALIZADOR": "DAIANE DE OLIVEIRA RAMOS",
+    "CONTATO": 4991950190,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SANDRO SCHMITZ",
+    "CONTATO": 4888220877,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FERNANDO SATIRO",
+    "CONTATO": 4896972618,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Criciúma e região Garopaba Imbituba Laguna Imarui Capivari de Baixo Tubarão Jaguaruna Armazém São Ludgero Urussanga Orleans Içara Lauro Muller Criciuma Araranguá Sombrio Santa Rosa Forquilhinha Turvo Meleiro\" Braço do norte, PRAIA GRANDE"
+  },
+  {
+    "LOCALIZADOR": "NILSON DUTRA",
+    "CONTATO": 4899770093,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDUARDO DOS SANTOS BARBOSA",
+    "CONTATO": 4892173628,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HILTON HENRIQUE",
+    "CONTATO": 4799880031,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "porto união / canoinhas"
+  },
+  {
+    "LOCALIZADOR": "JEFERSON FERNANDO NEVES",
+    "CONTATO": 49998150006,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Lages, Otacílio Costa, Correia Pinto, São Joaquim, Curitibanos, Santa Cecília, Campo Belo do Sul, Urubici, Bom Retiro, Alfredo Wagner, Urupema, Painel, Ponte Alta do Norte, São Cristóvão, Ponte Alta do Sul, Timbó Grande, Cerrito"
+  },
+  {
+    "LOCALIZADOR": "JONAS DAMAS",
+    "CONTATO": 4899986692,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Criciuma. Içara. Urussanga. Orleans. Braço do norte. Lauro Müller. Forquilhinha. Meleiro. Turvo. Ararangua. Sombrio. Santa Rosa do Sul Laguna, Tubarão , Capivari de Baixo , Imbituba , Garopaba , Armazem"
+  },
+  {
+    "LOCALIZADOR": "BRUNO DOS SANTOS BARBOSA",
+    "CONTATO": 4788122205,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANTÔNIO FREDERICO GONÇALVES DOS SANTOS NETO",
+    "CONTATO": 4899998182,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "YUDI SCHUTZ PIRES",
+    "CONTATO": 48999384730,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LOENARDO DEBARBA",
+    "CONTATO": 4796679922,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Penha Piçarras Barra velha Araquari Guaramirim São Francisco Garuva Itapoá As vezes *São bento do sul *Rio negrinho"
+  },
+  {
+    "LOCALIZADOR": "LUIZ ANTONIO MORDASKI",
+    "CONTATO": "47988520880/47988520880",
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Mafra, Rio Negrinho, São Bento do Sul (Campo Alegre), Itaiópolis, Papanduva, Porto União, Irineópolis, Joinville (Barra do Sul), São Francisco do Sul, Araquari, Jaraguá do Sul (Guaramirim, Schroeder, Massaranduba, Corupá), Pomerode, Barra Velha, Garuva.\n"
+  },
+  {
+    "LOCALIZADOR": "MARCIO VINICIUS DE SA",
+    "CONTATO": 4898341394,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "SÃO JOSE, PALHOÇA, BIGUAÇU, FLORIANOPOLIS"
+  },
+  {
+    "LOCALIZADOR": "DOGLAS HERNANI MAROSTICA",
+    "CONTATO": 4988579888,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCOS JOSE SOUZA DA SILVEIRA",
+    "CONTATO": 4891212745,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FERNANDO MANOEL PIRES JUNIOR",
+    "CONTATO": 48999588809,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MOACYR DOS SANTOS JUNIOR",
+    "CONTATO": 47996122618,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Blumenau, Gaspar, ilhota, Pomerode, Timbó e Indaial"
+  },
+  {
+    "LOCALIZADOR": "NATAN UEKER",
+    "CONTATO": 4988757565,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Chapecó Xaxim Xanxere Cordilheira alta Guatambu Coronel Freitas Pinhazlzinho Seara"
+  },
+  {
+    "LOCALIZADOR": "RICARDO ORTIZ",
+    "CONTATO": 4888311332,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "florianopolis Antonio Carlos Governador Celso ramos Biguaçu São José Palhoça Santo Amaro da Imperatriz"
+  },
+  {
+    "LOCALIZADOR": "THAMARA TAISSKA HESSE",
+    "CONTATO": 47999237093,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "THIAGO RAMOS",
+    "CONTATO": 47997392925,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Itajaí balneário Camboriú e Camboriú"
+  },
+  {
+    "LOCALIZADOR": "LAURO MARCOS PIPPER",
+    "CONTATO": 47996117574,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "TIAGO VIZZOTTO",
+    "CONTATO": 49991173991,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "PORTO BELO - TIJUCAS -"
+  },
+  {
+    "LOCALIZADOR": "MARCELO SOTELE",
+    "CONTATO": 47988395926,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Rio do Sul"
+  },
+  {
+    "LOCALIZADOR": "CLEDSON",
+    "CONTATO": 49991213504,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Videira, Fraiburgo, Tangará, Lebon Régis, Santa Cecília, Caçador, Campos novos, Anita Garibaldi, Joaçaba, Herval do oeste, Catanduvas, Capinzal"
+  },
+  {
+    "LOCALIZADOR": "RICARDO ALEXANDRO ORTIZ",
+    "CONTATO": 48988311332,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "THIAGO",
+    "CONTATO": 4797392925,
+    "COMARCA": "SC",
+    "ATUAÇÃO/ COMARCA": "Itajai/ itapema / Balneário"
+  },
+  {
+    "LOCALIZADOR": "JONALD GONCALVES SANTOS",
+    "CONTATO": 7996014570,
+    "COMARCA": "SE",
+    "ATUAÇÃO/ COMARCA": "ARACAJU"
+  },
+  {
+    "LOCALIZADOR": "IGOR RODRIGUES MOTA",
+    "CONTATO": 7999214678,
+    "COMARCA": "SE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAQUEL DE SOUZA PINHEIRO",
+    "CONTATO": 7988777828,
+    "COMARCA": "SE",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DIVACY",
+    "CONTATO": 79999727102,
+    "COMARCA": "SE",
+    "ATUAÇÃO/ COMARCA": "Aracaju"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE DOS SANTOS TEIXEIRA",
+    "CONTATO": 11983858491,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Fórum da Lapa - Capital - SP, Fórum Santana - Capital - SP, Fórum freguesia do O - Capital -SP, Fórum de Pinheiros - Capital - SP, Comarca de Caieiras - SP, Comarca de Franco da Rocha - SP, Comarca de Francisco Morato - SP"
+  },
+  {
+    "LOCALIZADOR": "AGNANDES SOUZA DO CARMO",
+    "CONTATO": 12989252789,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RVCMMARTINS",
+    "CONTATO": 11943965198,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO PAULO/ REGIÃO DE SANTO AMARO"
+  },
+  {
+    "LOCALIZADOR": "JONATHAN VERONEZ",
+    "CONTATO": 17991896148,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LEANDRO SANTOS",
+    "CONTATO": 13997085666,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Atuo em Praia Grande, Mongaguá, Itanhaém, Cubatão, SANTOS"
+  },
+  {
+    "LOCALIZADOR": "JÚLIO MORAES",
+    "CONTATO": 11940224600,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São Miguel, Itaquera, Tatuapé"
+  },
+  {
+    "LOCALIZADOR": "FRANÇA",
+    "CONTATO": 11987440035,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Pirituba, Nossa senhora do ó, lapa e santana, freguesia de ó"
+  },
+  {
+    "LOCALIZADOR": "FÁBIO N R",
+    "CONTATO": 11962887240,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SANTO AMARO"
+  },
+  {
+    "LOCALIZADOR": "ADEMIR MARQUES",
+    "CONTATO": "s",
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Bertioga Guarujá Santos Cubatão São Vicente Praia Grande Mongaguá Itanhaém Peruíbe Itariri e Pedro de Toledo Vale do Ribeira Registro Cajati Sete barras Cananéia Iguape Ilha Comprida"
+  },
+  {
+    "LOCALIZADOR": "ADRIEL LUCAS",
+    "CONTATO": 13974130588,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Bertioga (até Riviera) - Guarujá - Cubatão - Santos - São Vicente - Praia grande - Mongaguá - Itanhaém - Peruíbe -"
+  },
+  {
+    "LOCALIZADOR": "MPINHEIRO",
+    "CONTATO": 13997779019,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Registro, Juquia, Miracatu, Praia Grande, Mongagua, Itanhaem, Peruibe, Itariri, Pedro de Toledo, Miracatu, Juquia, Registro, Sete Barras, Iguape, Ilha Comprida, Cananeia , Pariquera acu, Jacupiranga, Cajati, Eldorado, Iporanga, Barra do Turvo"
+  },
+  {
+    "LOCALIZADOR": "FÁBIO",
+    "CONTATO": 1397405084813970112512,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Pedro de Toledo, Itariri, Peruibe, Itanhaém, Mongaguá, Praia Grande, São Vicente,Santos, Cubatão, Guarujá, Bertioga, Guararema"
+  },
+  {
+    "LOCALIZADOR": "JOÃO MARRICHI FILHO",
+    "CONTATO": 14996435414,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "OURINHOS, PALMITAL, CANDIDO MOTA,ASSIS,MARACAI ,PARAGUAÇU PAULISTA ,QUATA ,CHAVANTES, IPAUSSU,SANTA CRUZ DO RIO PARDO ,PIRAU ,FARTURA ,CERQUEIRA CESAR PARANAPANEMA, SAO PEDRO DO TURVO"
+  },
+  {
+    "LOCALIZADOR": "AGNANDES SOUZA",
+    "CONTATO": 11989252789,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Carapicuiba osascoTaboão / CARAPICUÍBA"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE APARECIDO SILVA",
+    "CONTATO": 11972667193,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "bragança paulista PIRACAIA"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE DAROS",
+    "CONTATO": 11981533517,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Butantã - Central - Pinheiros - Santana - FR. XV - BUTANTA"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE NUNES",
+    "CONTATO": 11947612510,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santo André, Ribeirão pires,Mogi das Cruzes, Guararema, Biritiba mirim"
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE RODOLFO",
+    "CONTATO": 12988261932,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO JOSE DOS CAMPOS - JACAREI"
+  },
+  {
+    "LOCALIZADOR": "ALMIR ROGERIO",
+    "CONTATO": NaN,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São jose do rio preto Mirassol Nova Granada Potirendaba"
+  },
+  {
+    "LOCALIZADOR": "MILTON GONZALES",
+    "CONTATO": NaN,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Sao Jose Do Rio Preto SP - Mirassol SP - Nova Granada SP - Palestina SP - Olímpia SP - Barretos SP - Sta Adélia SP - Catanduva SP - Itajobi SP - Novo Horizonte SP - Urupês SP - Potirendaba SP - José Bonifácio SP - Penápolis SP - Buritama SP - Nhandeara SP - Macaubal SP - Votuporanga SP - Tanabi SP"
+  },
+  {
+    "LOCALIZADOR": "ANDRE LUIZ DA SILVA",
+    "CONTATO": 11988642020,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ribeirão Pires, Mauá, rio grande da serra, itaquera"
+  },
+  {
+    "LOCALIZADOR": "ANDRÉ LUIZ PEREIRA",
+    "CONTATO": 16988075287,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ribeirão Preto/SP, Altinópolis, Cajuru, Batatais, Cravinhos, São Simão, Luís Antônio, Sta Rosa de Viterbo, Serrana, Brodowski, Jardinópolis, Jaboticabal, Barrinha, Sertãozinho, Guariba, Guará, Pontal, Taquaritinga, Pitangueiras, Viradouro, Bebedouro, Nuporanga, Monte Alto, Morro Agudo, Orlândia, Sales Oliveira, São Joaquim da Barra, Santo Antônio da Alegria, Santa Cruz da Esperança, Guará, Ituverava, Miguelópolis, Mococa, Cassia dos Coqueiros, Guaira, Santa Rita do Passa Quatro"
+  },
+  {
+    "LOCALIZADOR": "DOUGLAS CAMPOS",
+    "CONTATO": 11930697741,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santana, Penha de França, Tatuapé e V Prudente"
+  },
+  {
+    "LOCALIZADOR": "MARCIO NILTON PINSON",
+    "CONTATO": 14996113829,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "1. Lençóis Paulista, Boreibi, São Manuel, Areiopolis, Pratânia. Botucatu, Conchas, Pereiras, Anhembi, Itatinga, Paranapanema, Holambra, Itai, Avaré, Arandu, Cerqueira César, Aguas de Santa Bárbara, Iaras, Porangaba, Bofete, Guarei, Torre de Pedra"
+  },
+  {
+    "LOCALIZADOR": "ANGELINA LOURDES PEREZ",
+    "CONTATO": 11954330009,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. IX - VILA PRUDENTE"
+  },
+  {
+    "LOCALIZADOR": "ANISIO CAVALCANTE",
+    "CONTATO": 11998951738,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. I - SANTANA - FR. SANTANA"
+  },
+  {
+    "LOCALIZADOR": "REGINALDO CESAR GORI",
+    "CONTATO": 11940171828,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Pinheiros, Butanta, Osasco, Carapicuiba, Barueri, Santana de Parnaíba, Jandira, Itapevi, Cotia, Vargem grande Paulista"
+  },
+  {
+    "LOCALIZADOR": "MARCELO PINHEIRO DA SILVA",
+    "CONTATO": 13997779019,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Registro\nJuquia \nMiracatu\nPraia Grande \nMongagua \nItanhaem \nPeruibe \nItariri \nPedro de Toledo \nMiracatu \nJuquia \nRegistro \nSete Barras \nIguape \nIlha Comprida\nCananeia \nPariquera acu \nJacupiranga \nCajati \nEldorado \nIporanga \nBarra do Turvo"
+  },
+  {
+    "LOCALIZADOR": "GILMAR RIBEIRO",
+    "CONTATO": 11962353366,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Vila Prudente, Tatuapé, Penha, Ipiranga, Central, São Caetano do Sul e Santo André"
+  },
+  {
+    "LOCALIZADOR": "CARLOS ANTONIO",
+    "CONTATO": 11962887240,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Barueri - Jandira"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO AUGUSTO FRANCISCO DE CAMPOS",
+    "CONTATO": 11979535656,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RONNY SOARES",
+    "CONTATO": 11965845249,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Barueri, Jandira, Santana de Parnaíba, Cotia"
+  },
+  {
+    "LOCALIZADOR": NaN,
+    "CONTATO": 11953960831,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FELIPE AUGUSTO MONTANHA",
+    "CONTATO": 14996653837,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Lins, Guaiçara, Sabino, Cafelândia, Promissão e Getulina"
+  },
+  {
+    "LOCALIZADOR": "CARLOS EDUARDO",
+    "CONTATO": 11996360949,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Franco da Rocha - Caieiras - Cajamar - Francisco Morato - Bom Jesus de Perdoes - Fórum regional do Tatuapé - FR. VIII - TATUAPÉ"
+  },
+  {
+    "LOCALIZADOR": "CARLOS MARCELO PAGINI",
+    "CONTATO": 14981144847,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "JAU -"
+  },
+  {
+    "LOCALIZADOR": "JAIRO GOMES DA SILVA",
+    "CONTATO": 17991620191,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Valinhos, Vinhedo, Sumaré, Hortolândia, Campinas, Paulinia, Nova Odessa, itatiba e Louveira"
+  },
+  {
+    "LOCALIZADOR": "JONADABE CARNEIRO REIS",
+    "CONTATO": 15997001686,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALEX YSTOOT BATISTA MIRANDA",
+    "CONTATO": 12982122610,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE RODOLFO DE SOUZA",
+    "CONTATO": 12988261932,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO JOSÉ DOS CAMPOS"
+  },
+  {
+    "LOCALIZADOR": "ADRIANO MATIAS DE SOUSA",
+    "CONTATO": 11981555482,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Barueri e Itapevi"
+  },
+  {
+    "LOCALIZADOR": "LUIZ GUSTAVO ALVES DA SILVA LIMA",
+    "CONTATO": 11980515067,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ATIBAIA, CAIEIRAS, FRANCISCO MORATO, FRANCO DA ROCHA, MAIRIPORÃ(MORADIA), BOM JESUS DOS PERDÕES, BRAGANÇA PAULISTA, TATIBA, MORUNGABA, JARINÚ, JOANÓPOLIS, NAZARÉ PAULISTA, PIRACAIA, VARGEM"
+  },
+  {
+    "LOCALIZADOR": "GUILHERME THOMAZ RODRIGUES DA SILVA",
+    "CONTATO": 11982091728,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARTINS",
+    "CONTATO": 11976106666,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ITAPEVI"
+  },
+  {
+    "LOCALIZADOR": "CEZAR DE FREITAS NUNES",
+    "CONTATO": 16996013633,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Araraquara; Ibaté; São Carlos; Ribeirão Bonito; Boa Esperança do Sul; Nova Europa; Américo Brasiliense; Matão; Taquaritinga; Itápolis; Monte Alto; Guariba; Jaboticabal."
+  },
+  {
+    "LOCALIZADOR": "ALEXANDRE RAMALHO FRANCO",
+    "CONTATO": 11940161939,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Itatiba, Louveira, Jundiaí, Itupeva, Varzea Paulista, Campo limpo Paulista, Jarinu."
+  },
+  {
+    "LOCALIZADOR": "CLAUDENIR FERREIRA",
+    "CONTATO": 11998741045,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "VARZEA PAULISTA"
+  },
+  {
+    "LOCALIZADOR": "CAIO AMÉRICO SOUZA DO NASCIMENTO",
+    "CONTATO": 18997851859,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Araçatuba, Birigui, Guararapes, Buritama, Valparaiso, Bilac, Mirandopolis, Andradina"
+  },
+  {
+    "LOCALIZADOR": "VINICIUS JOSE DUTRA PEREIRA",
+    "CONTATO": 14997274940,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Avaré, Paranapanema, Itai, Taquarituba, Fartura, Cerqueira César, Ipaussu, Piraju, Santa Cruz do Rio Pardo, São Manuel, Lençóis, Agudos, Pirajui, Duartina, Piratininga"
+  },
+  {
+    "LOCALIZADOR": "JOSÉ DE ASSIS GUIRRA PEREIRA",
+    "CONTATO": 11961430960,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO PAULO (TODA REGIÃO DE SANTO AMARO)"
+  },
+  {
+    "LOCALIZADOR": "WILLIAM DELFINO DE PINHO",
+    "CONTATO": 11940245881,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Itapesirica da serra e Iguaçu"
+  },
+  {
+    "LOCALIZADOR": "MARCUS GARDIN",
+    "CONTATO": 16996023735,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DANILO",
+    "CONTATO": 11943735640,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Osasco, Cotia, Barueri"
+  },
+  {
+    "LOCALIZADOR": "DIOGO PAIXAO",
+    "CONTATO": 11974117284,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santana de Parnaíba SP, Cajamar SP, Piraporado Bom Jesus SP"
+  },
+  {
+    "LOCALIZADOR": "FABIO FERNANDES",
+    "CONTATO": 11968093884,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "capão redondo"
+  },
+  {
+    "LOCALIZADOR": "R-KAR",
+    "CONTATO": 13996047255,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santos-SP, São Vicente-SP, Cubatão-SP, Praia Grande-SP, Mongaguá-SP, Itanhaém-SP"
+  },
+  {
+    "LOCALIZADOR": "DIRCEU",
+    "CONTATO": 11973192639,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. XV - BUTANTÃ -"
+  },
+  {
+    "LOCALIZADOR": "ROBERTO PEREIRA DO NASCIMENTO",
+    "CONTATO": 11947168282,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Fórum central ,lapa, osasco, santana."
+  },
+  {
+    "LOCALIZADOR": "LUANA",
+    "CONTATO": 16988690560,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FRANCA"
+  },
+  {
+    "LOCALIZADOR": "WESLEY RODRIGUES CANFORA DE MORAES",
+    "CONTATO": 12992462683,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "KLEBER",
+    "CONTATO": 11947186694,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santana. Guarulhos. Aruja"
+  },
+  {
+    "LOCALIZADOR": "ANTONIO MARCOS PIRES",
+    "CONTATO": 19997013636,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDILSON FERNANDES DE OLIVEIRA",
+    "CONTATO": 16999782230,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Franca sp,"
+  },
+  {
+    "LOCALIZADOR": "JOAO MARCOS DA SILVA",
+    "CONTATO": 12997347887,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taubaté, Tremembé, Pindamonhangaba, Caçapava, Campos do Jordão, Ubatuba, Itajubá MG"
+  },
+  {
+    "LOCALIZADOR": "RONALDO LINO DA CRUZ",
+    "CONTATO": 14998652126,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO CELSO LANDINI MOUSINHO FILHO",
+    "CONTATO": 19999352235,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Americana, Santa barbara doeste, Nova odessa, Sumare, Paulinia, Limeira, Iracemapolis, Piracicaba, Rio das pedras, Capivari"
+  },
+  {
+    "LOCALIZADOR": "ROBERTO RABBAT",
+    "CONTATO": 11955517377,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RICARDO GOMES",
+    "CONTATO": 11987569680,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SANTO AMARO, Itapecerica da Serra, Taboão da Serra, EMBU, Embu Guaçu ( diligência única)"
+  },
+  {
+    "LOCALIZADOR": "EDUARDO MARION",
+    "CONTATO": 19974054659,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Americana Araras Leme"
+  },
+  {
+    "LOCALIZADOR": "ELAINE CRISTINA DELGADO",
+    "CONTATO": 12974040780,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "JACAREI"
+  },
+  {
+    "LOCALIZADOR": "VITOR",
+    "CONTATO": 11947260331,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "M.G.A RECUPERAÇÃO DE BENS",
+    "CONTATO": 11947265465,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Mogi das Cruzes, Suzano, Poá, Ferraz de Vasconcelos, Guaianases, Itaquaquecetuba, Arujá, Santa Isabel, Itaim Paulista, São Miguel Paulista, Itaquera"
+  },
+  {
+    "LOCALIZADOR": "CLÓVIS APARECIDO DE ROSSI",
+    "CONTATO": 14997036368,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FABIO CALADO RAMOS",
+    "CONTATO": 11984322635,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SANTO AMARO, ITAPECERICA DA SERRA E EMBU GUAÇU"
+  },
+  {
+    "LOCALIZADOR": "PAULO FERNANDES",
+    "CONTATO": 19993894003,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ARARAS, ARTUR NOGUEIRA, CAPIVARÍ, CHARQUEADA, CONCHAL, CORDEIROPOLIS, COSMOPOLIS ENGENHEIRO COELHO, IPEÚNA, LEME, LIMEIRA, NOVAODESSA, PAULINIA, PIRACICABA, PIRASSUNUNGA, PORTO FERREIRA, RIO CLARO, RIO DAS PEDRO, SANTA BÁRBARA D.OESTE, SANTA GERTRUDES"
+  },
+  {
+    "LOCALIZADOR": "JOSÉ MARCOS DOS SANTOS",
+    "CONTATO": 11949658960,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Itapevi e são roque"
+  },
+  {
+    "LOCALIZADOR": "ELAINE CRISTINA DELGADO",
+    "CONTATO": 11963079582,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Osasco Cotia Barueri Jandira Taboão da Serra"
+  },
+  {
+    "LOCALIZADOR": "ANA ALICE ALVES DA SILVA SOUZA",
+    "CONTATO": 19983418303,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Limeira, Piracicaba, Iracemapolis, Cordeiropolis, Cosmopolis, Aguas de São Pedro, São Pedro, Americana, Araras e Paulinia"
+  },
+  {
+    "LOCALIZADOR": "ELIDIO LUCAS",
+    "CONTATO": 11987742583,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ITAQUAQUECETUBA, ARUJÁ, POÁ, FERRAZ DE VASCONCELOS, SUZANO, MOGI DAS CRUZES, SANTA ISABEL"
+  },
+  {
+    "LOCALIZADOR": "FABIO DE LIMA",
+    "CONTATO": 13974205588,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Pedro de Toledo - Itariri - Peruibe - Itanhaem - Mongagua - Praia Grande - São Vicente - Santos - Cubatao - Guarujá - Bertioga - Guararema e Mogi das Cruzes"
+  },
+  {
+    "LOCALIZADOR": "FELIPE CARNEIRO",
+    "CONTATO": 14997981473,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOSÉ ROBERTO DA SILVA",
+    "CONTATO": 17997842475,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "VOTUPORANGA, FERNANDÓPOLIS, TANABI, CARDOSO, NHANDEARA, PAULO DE FARIA, GENERAL SALGADO, ESTRELA D'OESTE E OUROESTE"
+  },
+  {
+    "LOCALIZADOR": "AUGUSTO",
+    "CONTATO": 16997375751,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Araraquara, Matão, Américo Brasiliense, Ribeirão Bonito"
+  },
+  {
+    "LOCALIZADOR": "FERNANDA APARECIDA RAMOS",
+    "CONTATO": 11952949232,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. X - IPIRANGA"
+  },
+  {
+    "LOCALIZADOR": "FELIX E SALES LOCALIZAÇÕES",
+    "CONTATO": 11940829987,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santo André, Mauá, Ribeirão Pires e Rio Grande da Serra - São Bernardo do Campo, São Caetano do Sul e Diadema"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO ANDRADE",
+    "CONTATO": 15997129938,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "votorantim"
+  },
+  {
+    "LOCALIZADOR": "JHEISON",
+    "CONTATO": 16997270521,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ibitinga, Itápolis, Santa Adélia, Pirangi, Novo Horizonte, Urupês, Itajobi, Borborema, Bariri, Jaú, Taquaritinga, Monte Alto, Guariba, Pitangueiras, Jaboticabal, Pontal, Sertãozinho, São Simão, Matão, Ribeirão Bonito, Araraquara, Américo Brasiliense."
+  },
+  {
+    "LOCALIZADOR": "CLAUDIO JOSE DA SILVA",
+    "CONTATO": 11947561606,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "cotia e carapicuiba"
+  },
+  {
+    "LOCALIZADOR": "SAULO HUMBERTO GAMBAROTO",
+    "CONTATO": 19974145752,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "COSMOPOLIS - PAULINIA - VALINHOS - VINHEDO - LOUVEIRA - INDAIATUBA"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO HENRIQUE INFANTE",
+    "CONTATO": 19992343927,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO QUARESMA",
+    "CONTATO": 11947550694,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taboão da serra - embu das artes - embuguacu - itapevi - vargem grande Paulista - santana de parnaiba - cotia - ITAPECERICA DA SERRA"
+  },
+  {
+    "LOCALIZADOR": "PAULO BEZERRA CAVALCANTI FILHO",
+    "CONTATO": 11979934072,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "santana"
+  },
+  {
+    "LOCALIZADOR": "GISELE ROMÃO",
+    "CONTATO": 19981996923,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "GESSI",
+    "CONTATO": 14996941911,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Botucatu Itatinga São Manuel Barra bonita lençóis Paulista Macatuba Agudos Bauru Piratininga Duartina Cerqueira César Avaré itai Taquarituba Itaporanga Itabera Itararé Paranapanema Angatuba Buri Ipaussu Chavantes Ourinhos Sta Cruz do Rio Pardo Piraju Fartura - Ribeirão Claro-PR"
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE CALIMERIO ARAUJO",
+    "CONTATO": 11991235185,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FORO CENTRAL - Vila Prudente"
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE FERNANDES",
+    "CONTATO": 19993767459,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Campinas Cidade Judiciaria, Vila Mimosa, Valinhos, Vinhedo e Hortolândia"
+  },
+  {
+    "LOCALIZADOR": "PHELIPE DAVANCO PAULINO",
+    "CONTATO": 11945808908,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HELIO SILVIO DE SOUZA JUNIOR // RAFAEL LOPES DE SOUZA",
+    "CONTATO": 14991322382,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Todas as comarcas do estado de SP"
+  },
+  {
+    "LOCALIZADOR": "HENRIQUE POLETTO",
+    "CONTATO": 19991119127,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "valinhos, vinhedo e louveira"
+  },
+  {
+    "LOCALIZADOR": "IVAN RIBEIRO SILVA",
+    "CONTATO": 19982868572,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Mogi Mirim Mogi Guaçu Itapira Artur Nogueira Conchal Jaguariúna Pedreira Amparo Serra Negra Águas de Lindóia Cosmópolis"
+  },
+  {
+    "LOCALIZADOR": "VALQUIRIA VIEGAS TAFURI / ANDERSON TAFURI",
+    "CONTATO": "11947850826//11970374998",
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Osasco, Barueri, Carapicuíba, Jandira"
+  },
+  {
+    "LOCALIZADOR": "IVARS RALFS",
+    "CONTATO": 19992875611,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SUMARÉ, HORTOLANDIA, MONTE MOR E PAULINA"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO ALVES RIBEIRO DE SOUSA",
+    "CONTATO": 17997073528,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "são josé do rio preto"
+  },
+  {
+    "LOCALIZADOR": "EDNO VERONEZ",
+    "CONTATO": "C",
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São José do Rio Preto-Sp , Mirassol -SP, Neves Paulista -SP, Monte Aprazível -SP, Macaubal -SP, Nhandeara -SP, José Bonifácio -SP, Urupês -SP, Itajobi -SP, Catanduva -SP , Santa Adélia -SP , Tabapuã -SP, Olímpia -SP, Potirendaba -SP, Palestina -SP, Nova Granada -SP, Tanabi -SP, Votuporanga -SP, Novo Horizonte - SP"
+  },
+  {
+    "LOCALIZADOR": "IVONETE THEODORA DOS SANTOS",
+    "CONTATO": 11987614830,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. IV - LAPA - NOSSA SENHORA do Ò (PIRITUBA)"
+  },
+  {
+    "LOCALIZADOR": "JEFFERSON MARTINS FAGUNDES",
+    "CONTATO": 14996808103,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "BAURU - AGUDOS - PIRATININGA - AVARÉ - LENÇÕES PAULISTA - MACATUBA - PEDERNEIRAS - JAU - BARIRI - DUARTINA - PIRAJUI - AREALVA - MINEIROS DO TIETE - BARRA BONITA - IBITINGA - ITÁPOLIS - CAFELÂNDIA - IACANGA - OURINHOS - GARÇA - SÃO MANOEL - BROTAS - DOIS CORREGOS - LINS - MARÍLIA - PALMITAL - ASSIS - GETULINA - BORBOREMA - GALIA - TUPÂ - IPAUSSU - PIRAJU - POMPEIA - BASTOS - corregos -"
+  },
+  {
+    "LOCALIZADOR": "GLAUCO ROGÉRIO VASQUES",
+    "CONTATO": 12996794360,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO JOSÉ DOS CAMPOS, JACAREÍ E CAÇAPAVA"
+  },
+  {
+    "LOCALIZADOR": "IZABEL CRISTINA CARDOSO DE SOUZA",
+    "CONTATO": 14996845000,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Assis, Marília, Garça, Pompéia, Bastos, Tupa"
+  },
+  {
+    "LOCALIZADOR": "BRUNO OLIVEIRA GOMES",
+    "CONTATO": 19974105518,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "EDUARDO AUGUSTO CÂMARA VILELA",
+    "CONTATO": 16997580217,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Araraquara, São Carlos, Ibaté, Rio Claro, Pirassununga, Rio das Pedras, Santa Gertrudes Porto Ferreira, Descalvado, Brotas, Itirapina, \nTaquaritinga, Jaboticabal, Guariba, Pradópolis, Bebedouro, Matão, \nAmérico Brasiliense, Boa Esperança, Guarapiranga, Ribeirão Bonito, Gavião Peixoto, Nova Europa, Trabiju, Jaú, Bocaina, Bariri, Curupá, Monte Alto, Ibitinga, Tabatinga, Itapolis, Borborema, Dourado"
+  },
+  {
+    "LOCALIZADOR": "FELIPE DE PAULA FURLANETTO",
+    "CONTATO": 14981006968,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO CARLOS BARBOSA",
+    "CONTATO": 13997070308,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "JACUPIRANGA"
+  },
+  {
+    "LOCALIZADOR": "DAVID RODRIGUES DA SILVA",
+    "CONTATO": 16982619957,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RONALDO",
+    "CONTATO": 11941344311,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOAO FAVARO",
+    "CONTATO": 18997653452,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ADAMANTINA ALFREDO MARCONDES ALVARES MACHADO ANDRADINA . BASTOS CAIUÁ\nCASTILHO COSTA MACHADO CUIBÁ PAULISTA DRACENA EMILIANÓPOLIS FLORA RICA FLÓRIDA PAULISTA GUARARAPES INÚBIA PAULISTA IRAPURU JUNQUEIRÓPOLIS LAVÍNIA LUCÉLIA MARABÁ PAULISTA MARIÁPOLIS MIRANDÓPOLIS MIRANTE DO PARANAPANEMA MONTE CASTELO NOVA GUATAPORANGA NOVA INDEPENDÊNCIA OSVALDO CRUZ OURO VERDE PACAEMBU PANORAMA PARANÁPOLIS PAULICÉIA PEREIRA BARRETO PLANALTO DO SUL PRESIDENTE BERNARDES PRESIDENTE EPITÁCIO PRESIDENTE VENCESLAU ROSANA RUBIÁCEA SANTA MERCEDES SANTO ANASTÁCIO SANTO EXPEDITO SÃO JOÃO DO PAU D’ALHO TUPÃ TUPI PAULISTA VALPARAÍSO"
+  },
+  {
+    "LOCALIZADOR": "JOAO MARRICHI FILHO",
+    "CONTATO": 14996435414,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "PARAGUACU PAULISTA - ITAPORANGA"
+  },
+  {
+    "LOCALIZADOR": "JOSE ADILSON ANDRADE",
+    "CONTATO": 18996092935,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "MARTINOPOLIS-SP - PIRAPOZINHO-SP - PRESIDENTE BERNARDES-SP - PRESIDENTE PRUDENTE-SP - REGENTE FEIJO-SP"
+  },
+  {
+    "LOCALIZADOR": "JOÃO WASHINGTON JUNIOR",
+    "CONTATO": 11996446643,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "atibaia - NAZARE PAULISTA - ITATIBA"
+  },
+  {
+    "LOCALIZADOR": "GUSTAVO DIAS DA MOTA",
+    "CONTATO": 11966131216,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOELMA",
+    "CONTATO": 11964360508,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SAO CAETANO DO SUL"
+  },
+  {
+    "LOCALIZADOR": "JOSE ROBERTO MOREIRA JUNIOR",
+    "CONTATO": 16981320400,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JOEL ANTONIO",
+    "CONTATO": 11965260536,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SAO BERNARDO DO CAMPO - SAO BERNARDO DO CAMP"
+  },
+  {
+    "LOCALIZADOR": "LUCAS GREGORY DOS SANTOS",
+    "CONTATO": 11966161507,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDERSON TAFURI SOUTO",
+    "CONTATO": 11970374998,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "HUMBERTO BENJAMIN DA SILVA SOUZA",
+    "CONTATO": 16997477435,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JANE CRISTINA DE MOURA CASTILHO",
+    "CONTATO": 12981506488,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taubaté, Tremembé, Pindamonhangaba, Caçapava, Campos do Jordão, Ubatuba, Itajubá MG"
+  },
+  {
+    "LOCALIZADOR": "JEFERSON DA SILVA TAUCHEN",
+    "CONTATO": 12982150981,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São José dos Campos, Caçapava, Taubaté, Tremembé, Pindamonhangaba, Roseira, Aparecida, Potim, Guaratinguetá, Cunha, Lorena, Piquete, Cachoeira paulista, Cruzeiro , Queluz, São Luís do paritinga, Ubatuba, Campos do Jordão"
+  },
+  {
+    "LOCALIZADOR": "MARCELO DE AGUIAR",
+    "CONTATO": 15998232323,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RAFAEL COLTRO ALVES DE MOURA",
+    "CONTATO": 11967333342,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "IGOR PEREIRA FELIX",
+    "CONTATO": 11971913888,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JORGE SALATINI",
+    "CONTATO": 15997881199,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Boituva - itu - salto - cabreuvaindaiatubaporto feliztatui - Salto pirapora - Pilar do Sul - São Miguel Arcanjo - cerquilho - itapetininga - sorocaba - votorantim - piedade - ibiuna - são roque - mairinque - Tiete - Laranjal Paulista -Cesario Lange -"
+  },
+  {
+    "LOCALIZADOR": "JOSE AUGUSTO MAIA",
+    "CONTATO": 18997752329,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Penapolis -Birigui - Araçatuba - Guararapes -- Valparaiso - Mirandopolis - Andradina - Pereira Barreto - Ilha solteira - Auriflama - General salgado - Jales - Fernandopolis - Votuporanga - Ribeirão Preto"
+  },
+  {
+    "LOCALIZADOR": "LUIS RICARDO DE QUIEIROZ MARQUES",
+    "CONTATO": 18997714948,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUCAS ALMEIDA",
+    "CONTATO": 13974089852,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santos, Guarujá, Cubatão, Bertioga, São Vicente, Praia Grande, Mongagua, Itanhaem, Peruíbe, São Bernardo do Campo, Diadema, Santo Andre, São Caetano, Mauá, Ribeirão Pires e Rio Grande da Serra"
+  },
+  {
+    "LOCALIZADOR": "LUIS CARLOS MARCONDES RANGEL",
+    "CONTATO": 15988275240,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUCAS SILVA",
+    "CONTATO": 18997373173,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Assis; Cândido Mota; Palmital; Ourinhos; Santa Cruz do Rio Pardo; Marília; Tupã; Quatá; Paraguaçu Paulista; Maracaí;"
+  },
+  {
+    "LOCALIZADOR": "FRANCISCO CHAGAS DE SANTANA",
+    "CONTATO": 15997573252,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "SOLANGE ALVES NESTOR DE OLIVEIRA",
+    "CONTATO": 11947936307,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ANDRE LUIS SOUZA SANTOS",
+    "CONTATO": 11947177872,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "LUCIANO DE SOUZA NUNES",
+    "CONTATO": 11940088353,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Francisco Morato, Caieiras, Franco da Rocha, Jundiai"
+  },
+  {
+    "LOCALIZADOR": "MANOEL JOSE FILHO",
+    "CONTATO": 18997136179,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Adamantina - Bastos - SPRegente Feijo - Florida Paulista - JUNQUEIROPOLIS - Lucélia - OSVALDO CRUZ - Pacaembu - Presidente Prudente - Tupã - Dracena - Martinópolis"
+  },
+  {
+    "LOCALIZADOR": "MARCIO JOSE CRUVINEL",
+    "CONTATO": 14997126994,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CLEMERSON CARLOS LAMARE",
+    "CONTATO": 15996698899,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCELO DE OLIVEIRA JESUS",
+    "CONTATO": 18997327188,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Presidente Prudente Presidente Bernardes Presidente Venceslau Presidente Epitácio Pirapozinho Martinópolis Rancharia Quata Regente Feijó"
+  },
+  {
+    "LOCALIZADOR": "MARCIO",
+    "CONTATO": 11992913614,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Cajamar, Guarulhos, Mairipora, principalmente Caieiras"
+  },
+  {
+    "LOCALIZADOR": "GLEIDINALDO MENESES DA SILVA",
+    "CONTATO": 11998480655,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCIO CIRILO",
+    "CONTATO": 16999920382,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São Carlos, Itirapina, descalvado e Ibaté"
+  },
+  {
+    "LOCALIZADOR": "MARCOS ANTONIO DA SILVA",
+    "CONTATO": 15998514525,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "• BOITUVA • CAPIVARI • CERQUILHO • CESARIO LANGE • CONCHAS • LARANJAL PAULISTA • PORANGABA • PORTO FELIZ • TATUÍ • TIETÊ"
+  },
+  {
+    "LOCALIZADOR": "ADRIEL LUCAS LEITE",
+    "CONTATO": 13974131827,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCOS FUJIWARA",
+    "CONTATO": 19974033843,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Campinas, Louveira, Paulínia, Valinhos e Vinhedo"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL JOSE DE ALMEIDA E SILVA",
+    "CONTATO": 11994410775,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MARCOS ROBERTO DA SILVA",
+    "CONTATO": 15997898070,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SOROCABA TATUÍ TIETÊ ITAPETININGA PORTO FELIZ BOITUVA VOTORANTIM CERQUILHO LARANJAL PAULISTA SÃO MIGUEL ARCANJO PORANGABA PIEDADE IBIUNA PILAR DO SUL ANGATUBA ITU SÃO ROQUE SALTO MAIRINQUE"
+  },
+  {
+    "LOCALIZADOR": "MARCOS PAPAGAIO",
+    "CONTATO": 11992268481,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Osasco barueri e carapicuiba"
+  },
+  {
+    "LOCALIZADOR": "LEANDRO NEVES MARTINS",
+    "CONTATO": 14997043054,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "MILTON GUIRRA",
+    "CONTATO": 11920018599,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. II - SANTO AMARO"
+  },
+  {
+    "LOCALIZADOR": "JOAO WASHINGTON MACIEL JUNIOR",
+    "CONTATO": "11996446643/11939010403",
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ISIS LOPES MAGALHAES SANTOS",
+    "CONTATO": 19991146383,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "HORTOLÂNDIA-SP (residência), SUMARÉ-SP, CAMPINAS-SP, MONTE MOR-SP, PAULÍNIA-SP, NOVA ODESSA-SP"
+  },
+  {
+    "LOCALIZADOR": "JOAO ROBERTO DE SOUZA",
+    "CONTATO": 19974042001,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "NAILTON MORAES",
+    "CONTATO": 19981504321,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "AGUAS DE SÃO PEDRO"
+  },
+  {
+    "LOCALIZADOR": "DIRCEU FREITAS",
+    "CONTATO": 11997495392,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "PAULO GUILHERME SOUSA",
+    "CONTATO": 11998228997,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. III JABAQUARA - FR. VIII TATUAPÉ"
+  },
+  {
+    "LOCALIZADOR": "RAFAEL BATISTA COUTINHO LUCHI",
+    "CONTATO": 17992336315,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Rafael luchi aqui - Ainda faço.- Votuporanga - Ferndopolis - Jales - Santa Fé Do Sul - Nhandeara - Macaubal - Urania - Cardoso - Mirassol\n"
+  },
+  {
+    "LOCALIZADOR": "WALTER SOUZA",
+    "CONTATO": 11940084074,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São Miguel Paulista, Itaquera, Poá, Ferraz de Vasconcelos, Suzano e Itaquaquecetuba"
+  },
+  {
+    "LOCALIZADOR": "FERNANDA APARECIDA RAMOS",
+    "CONTATO": 11952949232,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "KLÉBER PEREIRA DO CARMO",
+    "CONTATO": 11976874863,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "REGIS SILVA PAULINO",
+    "CONTATO": 19981372773,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. VILA MIMOSA - ITU - INDAIATUBA - FR. MIMOSA - Campinas, Indaiatuba, Paulínia, Valinhos, Vinhedo, Louveira, Jundiaí, Cabreúva, Sumaré, Hortolândia, Itu, Salto, Monte Mor, Capivari"
+  },
+  {
+    "LOCALIZADOR": "REINALDO",
+    "CONTATO": 11944796229,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Franco da rocha, Francisco Morato, Cajamar"
+  },
+  {
+    "LOCALIZADOR": "REINALDO",
+    "CONTATO": 11993976840,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "ipiranga - jabaquara - diadema - são bernado - são caetano - santo andre - maua - ribeirao pires"
+  },
+  {
+    "LOCALIZADOR": "RENATO ALVES PEREIRA",
+    "CONTATO": 16981829922,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "PATROCINIO PAULISTA / RIBEIRÃO PRETO,"
+  },
+  {
+    "LOCALIZADOR": "NOVAES",
+    "CONTATO": 11983395835,
+    "COMARCA": "sp",
+    "ATUAÇÃO/ COMARCA": "São Paulo - Z. Leste: Itaquera, Cachoeirinha, Vila Curuçá, São Lucas, São Miguel, São Mateus - Guarulhos: Macedo, Bom Clima, Taboão, Pimentas, Bonsucesso, São João, Cocaia"
+  },
+  {
+    "LOCALIZADOR": "RICARDO PAES DE BARROS",
+    "CONTATO": 19974054660,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Americana santa Bárbara do Oeste Nova Odessa Sumaré Hortolandia Capivari Monte mor Araras Leme Limeira Rio claro Cordeiropolis Piracicaba santa barbara d oeste"
+  },
+  {
+    "LOCALIZADOR": "APARECIDO ROCHA QUEIROZ",
+    "CONTATO": 14996303488,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RICHARD",
+    "CONTATO": 18997039838,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Presidente Prudente,Assis,Maracaí, Iepê, Quatá, Paraguaçu paulista, Rancharia, Martinópolis, Osvaldo Cruz, Lucélia, Adamantina, Dracena, Junqueirópolis, Flórida paulista, Tupi paulista,Panorama, presidente Epitácio, presidente Venceslau,santo Anastácio, presidente Bernardes, Regente Feijó, Pirapozinho,mirante do Paranapanema e Teodoro Sampaio."
+  },
+  {
+    "LOCALIZADOR": "VINICIUS DE CAMPOS ANDRADE",
+    "CONTATO": 18981289338,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "MARTINOPOLIS-SP PIRAPOZINHO-SP PRESIDENTE BERNARDES-SP PRESIDENTE PRUDENTE-SP REGENTE FEIJO-SP SANTO ANASTACIO-SP"
+  },
+  {
+    "LOCALIZADOR": "MARCUS VINICIUS PEREIRA DE CAMPOS",
+    "CONTATO": 11964139758,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "JHONNY CASTRO TOLEDO",
+    "CONTATO": 11940010890,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "NOSSA SENHORA DO O"
+  },
+  {
+    "LOCALIZADOR": "ROBERTO PEREIRA",
+    "CONTATO": 11947168282,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Central - Lapa - Butantã - Nossa Senhora do Ó - Santana - Osasco (PIRITUBA)"
+  },
+  {
+    "LOCALIZADOR": "ROBINSON CAPELETE",
+    "CONTATO": 12974048914,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taubaté - Tremembe - Pindamonhangaba - Lorena - Aparecida - Cruzeiro - Cacapava - Campos do Jordão - São Luiz do paraitinga - Roseira"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO DIAS TIMOTEO",
+    "CONTATO": 11975418503,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ribeirão pires - Rio Grande da serra - Mauá - São Bernardo do Campo - Suzano - Santo andre"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO MACIEL",
+    "CONTATO": 11940106635,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FORO CENTRAL"
+  },
+  {
+    "LOCALIZADOR": "LOKKUS (SÃO PAULO)",
+    "CONTATO": 18981763535,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "- PRESIDENTE PRUDENTE: Presidente Prudente, Santo Expedito, Alfredo Marcondes, Anhumas, Narandiba, Irapuru, Sandovalina, Emilianópolis; \n-REGENTE FEIJÓ: Regente Feijó, Taciba, Caiabu \n- SANTO ANASTÁCIO: Santo Anastácio, Piquerobi \n- ÁLVARES MACHADO: Álvares Machado e região \n- RANCHARIA: Rancharia e região \n- PRESIDENTE VENCESLAU: Presidente Venceslau e região \n- PRESIDENTE EPITÁCIO: Presidente Epitácio e região \n- PANORAMA: Panorama, Paulicéia, Santa Mercedes \n-TUPI PAULISTA: Tupi Paulista, Monte Castelo, Nova Guataporanga, São João do Pau D'Alho \n- DRACENA: Dracena, Ouro Verde \n- JUNQUEIRÓPOLIS: Junqueirópolis e região \n- PACAEMBU: Pacaembu, Irapuru, Flora Rica, Santópolis do Aguapeí \n- FLÓRIDA PAULISTA: Flórida Paulista \n- ADAMANTINA: Adamantina, Mariápolis \n- LUCÉLIA: Lucélia, Inúbia Paulista, Pracinha \n- OSVALDO CRUZ: Osvaldo Cruz, Parapuã, Salmourão, Sagres \n- BASTOS: Bastos e região \n- TUPÃ: Tupã, Arco Íris, Quintana, Paulópolis, Oriente, \n- POMPÉIA: Pompéia e região \n- MIRANTE DO PARANAPANEMA: Mirante do Paranapanema e região \n- MARTINÓPOLIS: Martinópolis, Indiana \n- QUATÁ: Quatá, João Ramalho \n- PARAGUAÇU PAULISTA: Paraguaçu Paulista, Conceição do Monte Alegre, Lutécia, Oscar Bressane \n- IEPÊ: Iepê e região \n- PIRAPOZINHO: Pirapozinho, Tarabai, Narandiba \n- TEODORO SAMPAIO: Teodoro Sampaio, Euclides da Cunha Paulista \n"
+  },
+  {
+    "LOCALIZADOR": "RODRIGO MELEIRO DA CUNHA",
+    "CONTATO": 11938020886,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "JUNDIAI - ITUEPVA - VARZEA PAULISTA - CAMPO LIMPO PAULISTA - ITUPEVA"
+  },
+  {
+    "LOCALIZADOR": "ROGERIO SANCHES VALEJO",
+    "CONTATO": 12997958103,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SAO JOSE DOS CAMPOS - PARAIBUNA - CARAGUATATUBA - SÃO SEBASTIÃO - ILHABELA - UBATUBA - Caçapava - Taubate - Pindamonhangaba - Aparecida - Guaratinguetá - Cruzeiro"
+  },
+  {
+    "LOCALIZADOR": "RONI CAPELETE",
+    "CONTATO": 12974041943,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taubaté - Tremembe - Pindamonhangaba - Lorena - Aparecida - Cruzeiro - Cacapava - Campos do Jordão - São Luiz do paraitinga - Roseira"
+  },
+  {
+    "LOCALIZADOR": "SALVADOR LEMOS JUNIOR",
+    "CONTATO": 17991118059,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SÃO JOSÉ DO RIO PRETO - SP MIRASSOL - SP   NEVES PAULISTA - SP MONTE APRAZÍVEL - SP NHANDEARA - SP TANABI - SP VOTUPORANGA - SP CATANDUVA - SP SANTA ADÉLIA - SP ITAJOBI - SP URUPÊS - SP NOVO HORIZONTE - SP OLÍMPIA - SP JOSÉ BONIFÁCIO - SP PROMISSÃO - SP PENÁPOLIS - SP POTIRENDABA - SP NOVA GRANADA - SP PAULO DE FARIA - SP"
+  },
+  {
+    "LOCALIZADOR": "SAMUEL ALVES FILHO",
+    "CONTATO": 11940322489,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "guarulhos"
+  },
+  {
+    "LOCALIZADOR": "SILVIO ANTÔNIO DE SERAFIM PEZATTO",
+    "CONTATO": 15997359696,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Capão Bonito/SP Ribeirão Grande/SP Guapiara - Apiaí - Itaoca - Barra do Chapéu - Ribeira - Itapirapuã Paulista - Ribeirão Branco - Itapeva - Taquarivaí - Buri - Nova Campina - Itararé - Bom Sucesso de Itararé - Coronel Macedo - Riversul - Itaberá - Taguaí - Barão de Antonina - Fartura -"
+  },
+  {
+    "LOCALIZADOR": "THIAGO BARINI",
+    "CONTATO": 19988099541,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "campinas - FR. VILA MIMOSA"
+  },
+  {
+    "LOCALIZADOR": "TIAGO IMPERATRIZ",
+    "CONTATO": 17996228282,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Olimpia monte azul paulista bebedouro guaira colina barretos bebedouro viradouro pitangueiras pirangi monte alto santa adelia tabapua catanduva itajobi taquaritinga novo horizonte"
+  },
+  {
+    "LOCALIZADOR": "VILSON CASTRO",
+    "CONTATO": 11947209738,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. II - SANTO AMARO"
+  },
+  {
+    "LOCALIZADOR": "VINICIUS SANTOS DE BARROS",
+    "CONTATO": 11947265076,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. VII - ITAQUERA"
+  },
+  {
+    "LOCALIZADOR": "VINICIUS SIAS COUBE",
+    "CONTATO": 21982153070,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "AMPARO, MUTUA,"
+  },
+  {
+    "LOCALIZADOR": "ULISSES FERNANDES",
+    "CONTATO": 11940046146,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VITOR LOLIS OLIVEIRA",
+    "CONTATO": 11940253655,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. VIII - TATUAPÉ - FR. VI - PENHA DA FRANÇA"
+  },
+  {
+    "LOCALIZADOR": "ADALTON ANDRADE DE SOUZA",
+    "CONTATO": 12991638504,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "VIVIANE RUEDA RODRIGUES",
+    "CONTATO": 11947751272,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. XII - NOSSA SENHORA DO Ó / (PIRITUBA), FREGUESIA DE Ó"
+  },
+  {
+    "LOCALIZADOR": "WELITON SOUZA",
+    "CONTATO": 19996995885,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "- Aguaí - Caconde - Casa Branca - Espírito Santo do Pinhal - Mococa - São João da Boa Vista - São José do Rio Pardo - São Sebastião da Grama - Santa Cruz das Palmeiras - Vargem Grande do Sul\n"
+  },
+  {
+    "LOCALIZADOR": "WILLIAN DA SILVA OLIVEIRA",
+    "CONTATO": 11951357930,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FR. V - SÃO MIGUEL PAULISTA"
+  },
+  {
+    "LOCALIZADOR": "WELLINGTON BALBI MORAES",
+    "CONTATO": 16981652000,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WILSON DE JESUS ALMENARA",
+    "CONTATO": 15974032300,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "SOROCABA - VOTORANTIM - SALTO DE PIRAPORA + PILAR DO SUL - PIEDADE - IBIUNA - SÃO ROQUE - MAIRINQUE - ITU - SALTO - INDAIATUBA - PORTO FELIZ - TIETÊ - CERQUILHO - TATUI - BOITUVA"
+  },
+  {
+    "LOCALIZADOR": "FLAVIO ULISSES",
+    "CONTATO": 16981322043,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Jardinopolis Orlândia São Joaquim da barra Guará Ituverava Ipua Miguelópolis Igarapava Nuporanga Morro agudo Brodowski Cajuru Batatais Serrana Altinopolis, Sertaozinho Pontal Pitangueiras Bebedouro Monte azul paulista Monte alto Jaboticabal Taquaritinga Guariba São Simão Santa Rosa de Viterbo Viradouro Pirangi Cravinhos Santa Rita do passa quatro\n"
+  },
+  {
+    "LOCALIZADOR": "IGOR FELIX",
+    "CONTATO": 11971913888,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "1. São Paulo\n2. Barueri\n3. Caieiras\n4. Carapicuíba\n5. Cotia\n6. Diadema\n7. Embu das Artes\n8. Ferraz de Vasconcelos\n9. Francisco Morato\n10. Franco da Rocha\n11. Guarulhos\n12. Itapecerica da Serra\n13. Itapevi\n14. Itaquaquecetuba\n15. Jandira\n16. Mauá\n17. Mogi das Cruzes\n18. Osasco\n19. Poá\n20. Ribeirão Pires\n21. Rio Grande da Serra\n22. Santo André\n23. São Bernardo do Campo\n24. São Caetano do Sul\n25. Suzano\n26. Taboão da Serra"
+  },
+  {
+    "LOCALIZADOR": "RENAN LUIS BERNARDO",
+    "CONTATO": 17991989034,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "BRANDTRACKER",
+    "CONTATO": 11982364969,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "guarulhos"
+  },
+  {
+    "LOCALIZADOR": "WILLIAM",
+    "CONTATO": 11988224421,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São Miguel Paulista"
+  },
+  {
+    "LOCALIZADOR": "SAMUEL",
+    "CONTATO": 11940322489,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Guarulhos"
+  },
+  {
+    "LOCALIZADOR": "JAMES DE OLIVEIRA",
+    "CONTATO": 11959005266,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CEZAR",
+    "CONTATO": 16996013633,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Araraquara, Ibaté, São Carlos, Ribeirão Bonito, Boa Esperança do Sul, Nova Europa, Américo Brasiliense, Matão, Taquaritinga, Itápolis, Monte Alto, Guariba,\nJaboticabal."
+  },
+  {
+    "LOCALIZADOR": "BRUNO LUIZ PINTO NEVES",
+    "CONTATO": 13981597562,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROBINSON",
+    "CONTATO": 12974048914,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Taubate"
+  },
+  {
+    "LOCALIZADOR": "EDILSON",
+    "CONTATO": 16999782230,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "FRANCA"
+  },
+  {
+    "LOCALIZADOR": "FERNANDO",
+    "CONTATO": 15997129938,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Sorocaba / Votorantim"
+  },
+  {
+    "LOCALIZADOR": "JOELMA",
+    "CONTATO": 11964360508,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Diadema"
+  },
+  {
+    "LOCALIZADOR": "LUCAS",
+    "CONTATO": 13974089852,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "São Bernardo do Campo, Santo André, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra"
+  },
+  {
+    "LOCALIZADOR": "PLINIO NASCIMENTO RODRIGUES",
+    "CONTATO": 17991219146,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "WALLISON SANTOS DA SILVA",
+    "CONTATO": 11984043768,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CADU",
+    "CONTATO": 11940044194,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "CAPITAL"
+  },
+  {
+    "LOCALIZADOR": "SEBASTIAO PAULO BARBOSA",
+    "CONTATO": 16982381965,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ribeirão Preto, Serrana, Cajuru, Sta Rosa Viterbo, São Simão, Tambaú, Sta Cruz Palmeiras, Porto Ferreira, Descalvado, Sta Rita do Passa Quatro, Cravinhos, Sertãozinho, Guariba, Pontal, Pitangueiras, Viradouro, Jardinópolis, Brodowski, Batatais, Altinópolis, Nuporanga, Orlândia, Morro Agudo, Guará, São Joaquim da Barra, Ipuã, Américo Brasiliense, Jaboticabal, Taquaritinga, Monte Alto, Pirangi e Matão"
+  },
+  {
+    "LOCALIZADOR": "DIRCEU",
+    "CONTATO": 11997495392,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "CAPITAL"
+  },
+  {
+    "LOCALIZADOR": "PAULO SERGIO",
+    "CONTATO": 13997471208,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Santos / Cubatão / Praia Grande / Mongaguá/ Itanhaém e Peruíbe"
+  },
+  {
+    "LOCALIZADOR": "ANGELINA",
+    "CONTATO": 11954330009,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "CAPITAL"
+  },
+  {
+    "LOCALIZADOR": "HAILSON",
+    "CONTATO": 11947619873,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "MAUA"
+  },
+  {
+    "LOCALIZADOR": "WELITON",
+    "CONTATO": 19996995885,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "AGUAI"
+  },
+  {
+    "LOCALIZADOR": "ANDRÉ",
+    "CONTATO": 16993389878,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Ribeirão Preto/SP e região"
+  },
+  {
+    "LOCALIZADOR": "JEFFERSON",
+    "CONTATO": 14996808103,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Bauru/SP e região"
+  },
+  {
+    "LOCALIZADOR": "REGIS",
+    "CONTATO": 19981372773,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Campinas, Indaiatuba, Paulínia, Valinhos, Vinhedo, Louveira, Cabreúva, Itu, Salto, Sumaré, Hortolândia, Monte Mor, Elias Fausto, Capivari"
+  },
+  {
+    "LOCALIZADOR": "CLEBER",
+    "CONTATO": 13996129977,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "CARLOS OTTON",
+    "CONTATO": 15997153318,
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "Sorocaba ,Votorantim ,Itapetininga ( liminar ),Sao Miguel Arcanjo (liminar),Pilar do Sul,Salto de Pirapora ,Piedade,Ibiúna,São Roque,Alumínio ,Mairinque,Capão Bonito,Tatuí ,Tietê ,Cesário Lange,Laranjal Paulista,Itu,Salto,Indaiatuba ,Cabreúva,Boituva,Vargem Grande,Porto Feliz"
+  },
+  {
+    "LOCALIZADOR": "JOAO PAULO PEREIRA",
+    "CONTATO": 63984048176,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "ROENI",
+    "CONTATO": 6392182920,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": "ARAGUAÍNA/ARAGUATINS /ARAPOEMA/AUGUSTINOPOLIS/ANANÁS /AXIXÁ/COLINAS / COLMEIA/GUARAÍ/FILADÉLFIA /MIRACEMA/MIRANORTE/ITAGUATINS /ITACAJÁ / TOCANTINOPOLIS/WANDERLANDIA/XAMBIOÁ"
+  },
+  {
+    "LOCALIZADOR": "EVANILTON",
+    "CONTATO": 63981427658,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": "Palmas, paraíso, porto Nacional, novo Acordo, ponte Alta do Tocantins, Pium, Guarai, Miracema, Miranorte"
+  },
+  {
+    "LOCALIZADOR": "ROGÉRIO CORDEIRO",
+    "CONTATO": 6384015673,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "DIMY SAULO ANDRADE",
+    "CONTATO": 63992682074,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "AMARILDO PINHEIRO LEAO JUNIOR",
+    "CONTATO": 63991084299,
+    "COMARCA": "TO",
+    "ATUAÇÃO/ COMARCA": NaN
+  },
+  {
+    "LOCALIZADOR": "RUBENS TEIXEIRA",
+    "CONTATO": 3199507603,
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Abre-Campo, Açucena, Águas Formosas, Aimorés, Aiuruoca, Além Paraíba, Alfenas, Almenara, Alpinópolis, Alto Rio Doce, Alvinópolis, Andradas, Andrelândia, Araçuaí, Araguari, Araxá, Arcos, Areado, Arinos, Baependi, Bambuí, Barão de Cocais, Barbacena, Barroso, Belo Horizonte, Belo Vale, Betim, Bicas, Boa Esperança, Bocaiúva, Bom Despacho, Bom Sucesso, Bonfim, Bonfinópolis de Minas, Borda da Mata, Botelhos, Brasília de Minas, Brazópolis, Brumadinho, Bueno Brandão, Buenópolis, Buritis, Cabo Verde, Cachoeira de Minas, Caeté, Caldas, Camanducaia, Cambué, Cambuquira, Campanha, Campestre, Campina Verde, Campo Belo, Campos Altos, Campos Gerais, Canápolis, Candeias, Capelinha, Capinópolis, Carandaí, Carangola, Caratinga, Carlos Chagas, Carmo da Mata, Carmo de Minas, Carmo do Cajuru, Carmo do Paranaíba, Carmo do Rio Claro, Carmópolis de Minas, Cássia, Cataguases, Caxambu, Cláudio, Conceição das Alagoas, Conceição do Mato Dentro, Conceição do Rio Verde, Congonhas, Conquista, Conselheiro Lafaiete, Conselheiro Pena, Contagem, Coração de Jesus, Corinto, Coromandel, Coronel Fabriciano, Cristina, Cruzília, Curvelo, Diamantina, Divino, Divinópolis, Dores do Indaiá, Elói Mendes, Entre-Rios de Minas, Ervália, Esmeraldas, Espera Feliz, Espinosa, Estrela do Sul, Eugenópolis, Extrema, Ferros, Formiga, Francisco Sá, Frutal, Galiléia, Governador Valadares, Grão-Mogol, Guanhães, Guapé, Guaranésia, Guarani, Guaxupé, Ibiá, Ibiraci, Ibirité, Igarapé, Iguatama, Inhapim, Ipanema, Ipatinga, Itabira, Itabirito, Itaguara, Itajubá, Itamarandiba, Itambacuri, Itamoji, Itamonte, Itanhandu, Itanhomi, Itapajipe, Itapecerica, Itaúna, Ituiutaba, Itumirim, Iturama, Jaboticatubas, Jacinto, Jacuí, Jacutinga, Jaíba, Janaúba, Januária, Jequeri, Jequitinhonha, João Monlevade, João Pinheiro, Juatuba, Juiz de Fora, Lagoa da Prata, Lagoa Santa, Lajinha, Lambari, Lavras, Leopoldina, Lima Duarte, Luz, Machado, Malacacheta, Manga, Manhuaçu, Manhumirim, Mantena, Mar de Espanha, Mariana, Martinho Campos, Mateus Leme, Matias Barbosa, Matozinhos, Medina, Mercês, Mesquita, Minas Novas, Miradouro, Miraí, Montalvânia, Monte Alegre de Minas, Monte Azul, Monte Belo, Monte Carmelo, Monte Santo de Minas, Monte Sião, Montes Claros, Morada Nova de Minas, Muriaé, Mutum, Muzambinho, Nanuque, Natércia, Nepomuceno, Nova Era, Nova Lima, Nova Ponte, Nova Resende, Nova Serrana, Novo Cruzeiro, Oliveira, Ouro Branco, Ouro Fino, Ouro Preto, Palma, Pará de Minas, Paracatu, Paraguaçu, Paraisópolis, Paraopeba, Passa-Quatro, Passa-Tempo, Passos, Patos de Minas, Patrocínio, Peçanha, Pedra Azul, Pedralva, Pedro Leopoldo, Perdizes, Perdões, Piranga, Pirapetinga, Pirapora, Pitangui, Piumhi, Poço Fundo, Poços de Caldas, Pompéu, Ponte Nova, Porteirinha, Pouso Alegre, Prados, Prata, Pratápolis, Presidente Olegário, Raul Soares, Resende Costa, Resplendor, Ribeirão das Neves, Rio Casca, Rio Novo, Rio Paranaíba, Rio Pardo de Minas, Rio Piracicaba, Rio Pomba, Rio Preto, Rio Vermelho, Sabará, Sabinópolis, Sacramento, Salinas, Santa Bárbara, Santa Luzia, Santa Maria do Suaçuí, Santa Rita de Caldas, Santa Rita do Sapucaí, Santa Vitória, Santo Antônio do Monte, Santos Dumont, São Domingos do Prata, São Francisco, São Gonçalo do Sapucaí, São Gotardo, São João da Ponte, São João Del-Rei, São João do Paraíso, São João Evangelista, São João Nepomuceno, São Lourenço, São Romão, São Roque de Minas, São Sebastião do Paraíso, Senador Firmino, Serro, Sete Lagoas, Silvianópolis, Taiobeiras, Tarumirim, Teixeiras, Teófilo Otôni, Timóteo, Tiros, Tombos, Três Corações, Três Marias, Três Pontas, Tupaciguara, Turmalina, Ubá, Uberaba, Uberlândia, Unaí, Varginha, Várzea da Palma, Vazante, Vespasiano, Viçosa, Virginópolis, Visconde do Rio Branco."
+
+  },
+
+{
+    "LOCALIZADOR": "GENESIS C SILVA ",
+    "CONTATO": "31987860938",
+    "COMARCA": "MG",
+    "ATUAÇÃO/ COMARCA": "Coronel Fabriciano, Ipatinga, Timóteo, Ipaba, Santana do Paraíso, Governador Valadares, São João do Oriente, Divisópolis (Comarca Almenara)."
+
+  },
+
+{
+    "LOCALIZADOR": "LOHAN ",
+    "CONTATO": "4196960179",
+    "COMARCA": "PR",
+    "ATUAÇÃO/ COMARCA": "CURITIBA,SÃO JOSÉ DOS PINHAIS, PINHAIS"
+
+  },
+
+{
+    "LOCALIZADOR": "JOÃO CARLOS B DOMINGUES ",
+    "CONTATO": "13997070308",
+    "COMARCA": "SP",
+    "ATUAÇÃO/ COMARCA": "CAJATI, CANANÉIA, ELDORADO, IGUAPE, ILHA COMPRIDA, JACUPIRANGA, JUQUIÁ, MIRACATU, PARIQUERA-AÇU, REGISTRO, SETE BARRAS."
+
+  },
+
+{
+    "LOCALIZADOR": "DAIANE BORGES ",
+    "CONTATO": "62992473322",
+    "COMARCA": "GO",
+    "ATUAÇÃO/ COMARCA": "AURILÂNDIA, BARRO ALTO, CARMO DO RIO VERDE, CERES, CRIXÁS, ESTRELA DO NORTE, FORMOSO, GOIANÉSIA, GOIÁS, GUAPÓ, ITABERAÍ, ITAPACI, ITAPURANGA, ITAUÇU, JARAGUÁ, MARA ROSA, MINAÇU, NIQUELÂNDIA, NOVA GLÓRIA, NOVA MERICA, PILAR DE GOIÁS, PORANGATU, RIALMA, RIANÁPOLIS, RUBIATABA, SANTA ISABEL, SÃO MIGUEL DO ARAGUAIA, URUAÇU, URUANA, VALPARAÍSO."
+
+  } 
+
+
+  
+
+
+];
+
+/* --------- TRATAMENTO DOS DADOS --------- */
+let todos = [];
+
+todos = dados.map(it=>{
+    const nome = it["LOCALIZADOR"] || "";
+    const contato = String(it["CONTATO"] || "");
+    const ddd = contato.slice(0,2);
+    const numero = contato.slice(2);
+    const uf = it["COMARCA"] || "";
+    const comarca = it["ATUAÇÃO/ COMARCA"] || "Não informado";
+
+    return {nome, ddd, numero, uf, comarca};
+});
+
+/* --------- FUNÇÕES DE BUSCA --------- */
+function gerarCards(lista){
+  const results=document.getElementById("results");
+  const noResults=document.getElementById("noResults");
+  results.innerHTML="";
+  if(!lista.length){noResults.style.display="block";return;}
+  noResults.style.display="none";
+  lista.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <h3>${item.nome}</h3>
+      <div class="meta"><span class="click-copy" data-num="(${item.ddd}) ${item.numero}">(${item.ddd}) ${item.numero}</span> — ${item.uf}</div>
+      <div class="tag">${item.comarca}</div>
+    `;
+    results.appendChild(card);
+  });
+}
+
+function buscar(){
+  const termo=document.getElementById("cityInput").value.trim().toLowerCase();
+  const tipoFiltro=document.getElementById("filterType").value; // Novo: Obtém o tipo de filtro
+  const exato=document.getElementById("matchExact").checked;
+  
+  // O filtro "Exato" só é relevante para UF, ajustando a visibilidade do checkbox.
+  const matchExactLabel = document.getElementById("matchExactLabel");
+  matchExactLabel.style.display = (tipoFiltro === "uf") ? "inline-flex" : "none";
+
+  if(!termo)return gerarCards([]);
+
+  const filtrado=todos.filter(item=>{
+    let alvo = "";
+    
+    // Define qual campo será usado como alvo de acordo com o seletor
+    if (tipoFiltro === "nome") {
+      alvo = item.nome.toLowerCase();
+    } else if (tipoFiltro === "uf") {
+      alvo = item.uf.toLowerCase();
+    } else { // comarca_atuacao
+      alvo = item.comarca.toLowerCase();
+    }
+    
+    // Aplica o filtro: exato ou parcial
+    return exato && tipoFiltro === "uf" ? alvo === termo : alvo.includes(termo);
+  });
+
+  gerarCards(filtrado);
+}
+
+document.getElementById("searchBtn").onclick=buscar;
+document.getElementById("cityInput").onkeyup=e=>{if(e.key==="Enter")buscar();};
+
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('click-copy')) {
+    const num = e.target.getAttribute('data-num');
+    const elemento = e.target; // Referência ao elemento clicado
+    
+    // Tenta copiar para a área de transferência
+    navigator.clipboard.writeText(num)
+      .then(() => {
+        // Sucesso na cópia:
+        
+        // 1. Salva o texto original
+        const textoOriginal = elemento.textContent;
+        
+        // 2. Muda o texto do elemento para confirmar a cópia
+        elemento.textContent = "Copiado!";
+        
+        // 3. Opcional: Adiciona uma classe temporária para feedback visual (cor)
+        elemento.style.color = '#38bdf8'; // Um azul diferente para destaque
+        
+        // 4. Retorna ao texto original após um pequeno atraso
+        setTimeout(() => {
+          elemento.textContent = textoOriginal;
+          elemento.style.color = ''; // Remove a cor de destaque
+        }, 1200); // 1.2 segundos
+        
+      })
+      .catch(err => {
+        // Falha na cópia (pode acontecer se o navegador bloquear)
+        console.error('Erro ao copiar: ', err);
+        alert('Falha ao copiar o número.'); // Pode manter o alerta em caso de erro grave
+      });
+  }
+});
+</script>
+</body>
+</html>
